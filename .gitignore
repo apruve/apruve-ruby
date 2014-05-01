@@ -1,0 +1,42 @@
+*.gem
+*.rbc
+.bundle
+.config
+.yardoc
+InstalledFiles
+_yardoc
+coverage
+doc/
+lib/bundler/man
+pkg
+rdoc
+spec/reports
+test/tmp
+test/version_tmp
+tmp
+
+# Mac finder artifacts
+.DS_Store
+
+# Eclipse-based IDE project files
+.project
+
+# Idea-based IDE project files
+.idea
+.idea/*
+
+# Textmate project files
+/*.tmproj
+
+# vim artifacts
+**.swp
+
+# rbenv ruby version for local directory
+.ruby-version
+.rbenv-version
+
+#ctags file for vim.
+tags
+
+# aptana studio 3
+.settings/*
