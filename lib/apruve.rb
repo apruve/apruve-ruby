@@ -1,6 +1,5 @@
 require 'apruve/version'
-require 'net/http'
-
+require 'apruve/client'
 module Apruve
 
   @client = nil

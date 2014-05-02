@@ -3,21 +3,25 @@ lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'apruve/version'
 
-Gem::Specification.new do |spec|
-  spec.name          = 'apruve'
-  spec.version       = Apruve::VERSION
-  spec.authors       = ['Neal Tovsen']
-  spec.email         = ['neal@apruve.com']
-  spec.summary       = 'Helper library for integrating Apruve into a ruby app.'
-  spec.description   = 'Easily integrate the Apruve B2B payment network into your ruby-based application.'
-  spec.homepage      = 'https://www.apruve.com'
-  spec.license       = 'MIT'
+Gem::Specification.new do |gem|
+  gem.name          = 'apruve'
+  gem.version       = Apruve::VERSION
+  gem.authors       = ['Apruve, Inc.', 'Neal Tovsen']
+  gem.email         = ['support@apruve.com']
+  gem.summary       = 'Helper library for integrating Apruve into a ruby app.'
+  gem.description   = 'Easily integrate the Apruve B2B payment network into your ruby-based application.'
+  gem.homepage      = 'https://www.apruve.com'
+  gem.license       = 'MIT'
 
-  spec.files         = `git ls-files -z`.split("\x0")
-  spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
-  spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
-  spec.require_paths = ['lib']
+  gem.files         = `git ls-files -z`.split("\x0")
+  gem.executables   = gem.files.grep(%r{^bin/}) { |f| File.basename(f) }
+  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
+  gem.require_paths = ['lib']
 
-  spec.add_development_dependency 'bundler', '~> 1.5'
-  spec.add_development_dependency 'rake'
+  gem.add_development_dependency 'bundler', '~> 1.5'
+  gem.add_development_dependency 'rake'
+
+  gem.add_dependency('faraday', ['>= 0.8.6', '<= 0.9.0'])
+  gem.add_dependency('faraday_middleware', '~> 0.9.0')
+  gem.add_dependency('addressable', '~> 2.3.5')
 end

@@ -1,19 +1,76 @@
-class ApruveClient
-  APRUVE_URL = ENV['APRUVE_URL']
-  APRUVE_USE_SSL = (ENV['APRUVE_USE_SSL'].downcase == 'true' or ENV['APRUVE_USE_SSL'] == '1')
-  if (ENV['APRUVE_VERIFY_SSL'] and (ENV['APRUVE_VERIFY_SSL'] == 'false' or ENV['APRUVE_VERIFY_SSL'] == '1'))
-    APRUVE_VERIFY_SSL_CERT = OpenSSL::SSL::VERIFY_NONE
-  else
-    APRUVE_VERIFY_SSL_CERT = OpenSSL::SSL::VERIFY_PEER
-  end
+require 'logger'
+require 'uri'
+require 'faraday'
+require 'faraday_middleware'
+# require 'apruve_exception_middleware'
 
-  APRUVE_PAYMENTS_URL = APRUVE_URL + '/api/v3/payment_requests/%s/payments'
-  APRUVE_FINALIZE_URL = APRUVE_URL + '/api/v3/payment_requests/%s/finalize'
-  APRUVE_JS_URL = APRUVE_URL + '/js/apruve.js?display=compact'
+module Apruve
+  class Client
+    DEFAULTS = {
+        :scheme => 'http',
+        :host => 'localhost',
+        :port => 5000,
+        :version => '1',
+        :logging_level => 'WARN',
+        :connection_timeout => 60,
+        :read_timeout => 60,
+        :logger => nil,
+        :ssl_verify => true,
+        :faraday_adapter => Faraday.default_adapter,
+        :accept_type => 'application/vnd.api+json'
+    }
 
-  def create_payment(token)
-    url = APRUVE_PAYMENTS_URL % token
-    puts url
+    attr_reader :conn
+    attr_accessor :api_key, :config
+
+    def initialize(api_key, options={})
+      @api_key = api_key.nil? ? api_key : api_key.strip
+      @config = DEFAULTS.merge options
+      build_conn
+    end
+
+
+    def build_conn
+      if config[:logger]
+        logger = config[:logger]
+      else
+        logger = Logger.new(STDOUT)
+        logger.level = Logger.const_get(config[:logging_level].to_s)
+      end
+
+      # Faraday::Response.register_middleware :handle_balanced_errors => lambda { Faraday::Response::RaiseApruveError }
+
+      options = {
+          :request => {
+              :open_timeout => config[:connection_timeout],
+              :timeout => config[:read_timeout]
+          },
+          :ssl => {
+              :verify => @config[:ssl_verify] # Only set this to false for testing
+          }
+      }
+      @conn = Faraday.new(url, options) do |cxn|
+        cxn.request :json
+
+        cxn.response :logger, logger
+        # cxn.response :handle_balanced_errors
+        cxn.response :json
+        # cxn.response :raise_error # raise exceptions on 40x, 50x responses
+        cxn.adapter config[:faraday_adapter]
+      end
+      conn.path_prefix = '/'
+      conn.headers['User-Agent'] = "apruve-ruby/#{Apruve::VERSION}"
+      conn.headers['Content-Type'] = "application/json;revision=#{@config[:version]}"
+      conn.headers['Accept'] = "#{@config[:accept_type]};revision=#{@config[:version]}"
+    end
+
+    def url
+      builder = (config[:scheme] == 'http') ? URI::HTTP : URI::HTTPS
+
+      builder.build({:host => config[:host],
+                     :port => config[:port],
+                     :scheme => config[:scheme]})
+    end
   end
 end
 
