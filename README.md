@@ -1,6 +1,8 @@
-# ApruveGem
+# Apruve
 
-TODO: Write a gem description
+Apruve helps B2B merchants by making it easier for customers to buy what they need for
+their jobs. The apruve gem makes it easier for merchants on Ruby-based platforms to
+integrate Apruve!
 
 ## Installation
 
@@ -18,7 +20,20 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Create a store on Apruve. Use test.apruve.com for test accounts.
+
+### Create a PaymentRequest
+    @pr = Apruve::PaymentRequest.new
+    @pr.merchant_id =
+
+### On your web page, declare apruve.js
+
+
+3. Load the PaymentRequest and it's hash into apruve.js
+4. Decide where to put the Apruve button
+5. Register a call-back function to get the transaction ID back to your server
+6. Tell Apruve to create a payment against the transaction ID
+7. Process the webhook from Apruve when payment is received
 
 ## Contributing
 

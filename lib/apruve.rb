@@ -1,5 +1,9 @@
-require 'apruve/version'
+$:.unshift File.join(File.dirname(__FILE__), 'apruve', 'resources')
+$:.unshift File.join(File.dirname(__FILE__), 'apruve', 'response')
+
 require 'apruve/client'
+require 'apruve/version'
+
 module Apruve
 
   @client = nil
@@ -15,60 +19,66 @@ module Apruve
     attr_accessor :client
     attr_accessor :config
 
-    def configure(api_key=nil, options={})
+    PROD = 'prod'
+    TEST = 'test'
+    LOCAL = 'local'
+
+    def configure(api_key=nil, environment=PROD, options={})
+      configure_environment environment
       @config = @config.merge(options)
       @client = Apruve::Client.new(api_key, @config)
     end
+
+    def js(display=nil)
+      display_param = display.nil? ? '' : "?display=#{display}"
+      "<script type=\"text/javascript\" src=\"#{js_url}#{display_param}\"></script>"
+    end
+
+    def button
+      '<div id="apruveDiv"></div>'
+    end
+
+    private
+
+    def configure_environment(env)
+      if env == PROD
+        @config = {
+            :scheme => 'https',
+            :host => 'www.apruve.com',
+            :port => 443,
+            :version => '1',
+        }
+      elsif env == TEST
+        @config = {
+            :scheme => 'https',
+            :host => 'test.apruve.com',
+            :port => 443,
+            :version => '1',
+        }
+      elsif env == LOCAL
+        @config = {
+            :scheme => 'http',
+            :host => 'localhost',
+            :port => 3000,
+            :version => '1',
+        }
+      else
+        raise 'unknown environment'
+      end
+    end
+
+    def js_url
+      port_param = [443, 80].include?(@config[:port]) ? '' : ":#{@config[:port]}"
+      "#{@config[:scheme]}://#{@config[:host]}#{port_param}/js/apruve.js"
+    end
   end
 
-  #
-  #class PaymentRequest < Apruve::ApruveObject
-  #  require 'digest'
-  #  attr_accessor :merchant_id, :amount_cents, :currency, :line_items, :api_key, :recurring
-  #
-  #  def initialize(args = {})
-  #    super args
-  #    @line_items = [] if @line_items.nil?
-  #  end
-  #
-  #  def token_input
-  #    token_string = to_hash.map do |k, v|
-  #      str = ""
-  #      if v.kind_of?(Array)
-  #        v.each do |item|
-  #          str = str + item.map { |q, r| r }.join
-  #        end
-  #      else
-  #        str = v
-  #      end
-  #      str
-  #    end
-  #    token_string.join
-  #  end
-  #
-  #  def token
-  #    if api_key.nil?
-  #      raise "api_key has not been set."
-  #    end
-  #    Digest::SHA256.hexdigest(api_key+token_input)
-  #  end
-  #
-  #  def validate
-  #    if merchant_id.nil? || (amount_cents.nil? and not recurring) || currency.nil? || line_items.size < 1
-  #      raise "PaymentRequest must specify merchant_id, amount_cents, currency, and at least one line item."
-  #    end
-  #    line_items.each { |line_item| line_item.validate }
-  #  end
-  #end
-  #
-  #class LineItem < Apruve::ApruveObject
-  #  attr_accessor :title, :amount_cents, :quantity, :price_ea_cents, :description, :sku
-  #
-  #  def validate
-  #    if title.nil?
-  #      raise "Line items must specifiy title and amount_cents unless the payment_request is recurring."
-  #    end
-  #  end
-  #
-  #end
+  # run configure on import so we have a default configuration
+  # that will run without an api-key
+  configure
 end
+
+
+# require all the resources! this is needed at the end because
+# the module needs to be defined first, as it contains the registry
+require 'apruve/resources'

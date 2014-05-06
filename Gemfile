@@ -20,7 +20,7 @@ group :test do
   gem 'ruby-debug-base19x'
   gem 'ruby-debug-ide'
 
-  gem 'ffaker'
+  gem 'faker'
   gem 'net-http-persistent'
   gem 'rspec', '~> 2.14.1'
   gem 'rake', '~> 10.0.3'
