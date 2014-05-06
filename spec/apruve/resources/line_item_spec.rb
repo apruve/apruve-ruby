@@ -1,17 +1,12 @@
 require 'spec_helper'
 
 describe Apruve::LineItem do
-  let (:line_item) { Apruve::LineItem.new }
-  let (:title) { Faker::Lorem.sentence }
-  let (:amount_cents) { 12340 }
-  let (:price_ea_cents) { 1234 }
-  let (:quantity) { 10 }
-  let (:description) { Faker::Lorem.paragraph }
-  let (:variant_info) { Faker::Lorem.sentence }
-  let (:sku) { Faker::Lorem.word }
-  let (:vendor) { Faker::Name.name }
-  let (:view_product_url) { Faker::Internet.url }
-  let (:plan_code) { Faker::Lorem.word }
+  let (:line_item) do
+    Apruve::LineItem.new(
+        title: 'line 2',
+        amount_cents: '40'
+    )
+  end
   subject { line_item }
 
   it { should respond_to(:title) }
@@ -25,41 +20,20 @@ describe Apruve::LineItem do
   it { should respond_to(:view_product_url) }
   it { should respond_to(:plan_code) }
 
-  describe 'attributes' do
-    before :each do
-      line_item.title = title
+
+  describe '#validate' do
+    describe 'no errors' do
+      it 'should not raise' do
+        expect { line_item.validate }.not_to raise_error
+      end
     end
-
-    its(:title) { should eq title }
-  end
-
-  describe '#values' do
-    describe 'only title' do
+    describe 'errors' do
       before :each do
-        line_item.title = title
+        line_item.title = nil
       end
-      its(:value_string) { should eq title }
+      it 'should raise on no title' do
+        expect { line_item.validate }.to raise_error(Apruve::ValidationError, '["title must be set on line items"]')
+      end
     end
-
-    describe '#value_string' do
-      let(:expected) do
-        "#{title}#{amount_cents}#{price_ea_cents}#{quantity}#{description}#{variant_info}#{sku}"\
-        "#{vendor}#{view_product_url}#{plan_code}"
-      end
-      before :each do
-        line_item.title = title
-        line_item.amount_cents = amount_cents
-        line_item.price_ea_cents = price_ea_cents
-        line_item.quantity = quantity
-        line_item.description = description
-        line_item.variant_info = variant_info
-        line_item.sku = sku
-        line_item.vendor = vendor
-        line_item.view_product_url = view_product_url
-        line_item.plan_code = plan_code
-      end
-      its(:value_string) { should eq expected }
-    end
-
   end
 end
