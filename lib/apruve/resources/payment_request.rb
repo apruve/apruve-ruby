@@ -3,6 +3,11 @@ module Apruve
     attr_accessor :merchant_id, :merchant_order_id, :amount_cents, :tax_cents,
                   :shipping_cents, :line_items, :api_url, :view_url, :created_at, :updated_at
 
+    def initialize(params)
+      super
+      @line_items = [] if @line_items.nil?
+    end
+
     def value_string
       "#{merchant_id}#{merchant_order_id}#{amount_cents}#{tax_cents}#{shipping_cents}#{line_item_values}"\
       "#{api_url}#{view_url}"
@@ -25,7 +30,7 @@ module Apruve
 
     def line_item_values
       item_value = ''
-      unless line_items.nil?
+      unless line_items.nil? || line_items.size == 0
         line_items.each do |line_item|
           item_value += line_item.value_string
         end
