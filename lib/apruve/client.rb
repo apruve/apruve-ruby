@@ -9,7 +9,7 @@ module Apruve
     DEFAULTS = {
         :scheme => 'http',
         :host => 'localhost',
-        :port => 5000,
+        :port => 3000,
         :version => '1',
         :logging_level => 'WARN',
         :connection_timeout => 60,
@@ -70,6 +70,29 @@ module Apruve
       builder.build({:host => config[:host],
                      :port => config[:port],
                      :scheme => config[:scheme]})
+    end
+
+    def method_missing(method, *args, &block)
+      if is_http_method? method
+        conn.basic_auth(api_key, '') unless api_key.nil?
+        conn.send method, *args
+      else
+        super method, *args, &block
+      end
+    end
+
+    private
+
+    def is_http_method? method
+      [:get, :post, :put, :delete].include? method
+    end
+
+    def respond_to?(method, include_private = false)
+      if is_http_method? method
+        true
+      else
+        super method, include_private
+      end
     end
   end
 end

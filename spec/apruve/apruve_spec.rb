@@ -62,6 +62,10 @@ describe 'Apruve' do
     end
   end
 
+  describe '#get' do
+    let (:client)
+  end
+
   describe '#client' do
     describe 'before configure' do
       it 'should provide a client if not configured' do

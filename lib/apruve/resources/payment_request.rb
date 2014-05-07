@@ -3,6 +3,10 @@ module Apruve
     attr_accessor :merchant_id, :merchant_order_id, :amount_cents, :tax_cents,
                   :shipping_cents, :line_items, :api_url, :view_url, :created_at, :updated_at
 
+    def self.find(id)
+      Apruve.get("/payment_requests/#{id}")
+    end
+
     def initialize(params)
       super
       @line_items = [] if @line_items.nil?

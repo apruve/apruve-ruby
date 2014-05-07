@@ -38,6 +38,27 @@ module Apruve
       '<div id="apruveDiv"></div>'
     end
 
+    def get(*args, &block)
+      self.client.get *args
+    end
+
+    def post(*args, &block)
+      self.client.post *args
+    end
+
+    def put(*args, &block)
+      self.client.put *args
+    end
+
+    def unstore(*args, &block)
+      self.client.unstore *args
+    end
+
+    alias_method :delete, :unstore
+
+    # run configure on import so we have a default configuration
+    # that will run without an api-key
+
     private
 
     def configure_environment(env)
@@ -73,8 +94,6 @@ module Apruve
     end
   end
 
-  # run configure on import so we have a default configuration
-  # that will run without an api-key
   configure
 end
 

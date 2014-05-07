@@ -100,4 +100,18 @@ describe Apruve::PaymentRequest do
       end
     end
   end
+
+  describe '#find' do
+    let (:id) {'foobar'}
+
+    it 'should do a get' do
+      stubs = Faraday::Adapter::Test::Stubs.new do |stub|
+        stub.get("/api/v3/payment_requests/#{id}") { [200, {}, 'egg'] }
+      end
+
+      Apruve::PaymentRequest.find(id)
+
+      stubs.verify_stubbed_calls
+    end
+  end
 end
