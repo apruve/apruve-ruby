@@ -10,7 +10,7 @@ module Apruve
         :scheme => 'http',
         :host => 'localhost',
         :port => 3000,
-        :version => '1',
+        :version => '3',
         :logging_level => 'WARN',
         :connection_timeout => 60,
         :read_timeout => 60,

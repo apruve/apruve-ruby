@@ -8,10 +8,10 @@ module Apruve
 
   @client = nil
   @config = {
-      :scheme => 'https',
-      :host => 'www.apruve.com',
-      :port => 443,
-      :version => '1',
+      :scheme => 'http',
+      :host => 'localhost',
+      :port => 3000,
+      :version => '3',
   }
 
   class << self

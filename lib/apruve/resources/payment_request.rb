@@ -4,7 +4,7 @@ module Apruve
                   :shipping_cents, :line_items, :api_url, :view_url, :created_at, :updated_at
 
     def self.find(id)
-      Apruve.get("/payment_requests/#{id}")
+      Apruve.get("/api/#{Apruve.client.config[:version]}/payment_requests/#{id}")
     end
 
     def initialize(params)
