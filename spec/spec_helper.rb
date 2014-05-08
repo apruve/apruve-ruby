@@ -8,7 +8,27 @@ end
 
 require 'rubygems'
 require 'faker'
+require 'vcr'
 
 RSpec.configure do |config|
-  #config.include Rack::Test::Methods
+  # config.include Rack::Test::Methods
+end
+
+def faraday_stubs
+  stubs = Faraday::Adapter::Test::Stubs.new do |stub|
+    yield(stub)
+  end
+
+  conn = Faraday.new do |builder|
+    # Order is kinda important here...
+    builder.response :raise_error # raise exceptions on 40x, 50x responses
+    builder.use Apruve::FaradayErrorHandler
+    builder.request :json
+    builder.response :handle_apruve_errors
+    builder.response :apruve_json_parser
+    builder.adapter :test, stubs
+  end
+  conn.path_prefix = "/api/#{Apruve.config[:version]}"
+  Apruve.client.conn = conn
+  stubs
 end

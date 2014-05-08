@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Apruve::PaymentRequest do
   before :each do
-    Apruve.configure
+    Apruve.configure('f5fbe71d68772d1f562ed6f598b995b3', 'local')
   end
 
   let (:line_items) do
@@ -69,6 +69,9 @@ describe Apruve::PaymentRequest do
   describe '#secure_hash' do
     describe 'no api_key' do
       let (:error) { 'api_key has not been set. Set it with Apruve.configure(api_key, environment, options)' }
+      before :each do
+        Apruve.configure
+      end
       it 'should raise' do
         expect { payment_request.secure_hash }.to raise_error(error)
       end
@@ -102,16 +105,29 @@ describe Apruve::PaymentRequest do
   end
 
   describe '#find' do
-    let (:id) {'foobar'}
-
-    it 'should do a get' do
-      stubs = Faraday::Adapter::Test::Stubs.new do |stub|
-        stub.get("/api/v3/payment_requests/#{id}") { [200, {}, 'egg'] }
+    let (:id) { '89ea2488fe0a5c7bb38aa7f9b088874a' }
+    describe 'success' do
+      let! (:stubs) do
+        faraday_stubs do |stub|
+          stub.get("/api/v3/payment_requests/#{id}") { [200, {}, '{}'] }
+        end
       end
+      it 'should do a get' do
+        Apruve::PaymentRequest.find(id)
+        stubs.verify_stubbed_calls
+      end
+    end
 
-      Apruve::PaymentRequest.find(id)
-
-      stubs.verify_stubbed_calls
+    describe 'not found' do
+      let! (:stubs) do
+        faraday_stubs do |stub|
+          stub.get("/api/v3/payment_requests/#{id}") { [404, {}, 'Not Found'] }
+        end
+      end
+      it 'should raise' do
+        expect { Apruve::PaymentRequest.find(id) }.to raise_error(Apruve::NotFound)
+        stubs.verify_stubbed_calls
+      end
     end
   end
 end

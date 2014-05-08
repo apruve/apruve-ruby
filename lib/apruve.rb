@@ -3,6 +3,9 @@ $:.unshift File.join(File.dirname(__FILE__), 'apruve', 'response')
 
 require 'apruve/client'
 require 'apruve/version'
+require 'apruve/error'
+require 'apruve/faraday_error_handler'
+require 'apruve/utils'
 
 module Apruve
 
@@ -11,7 +14,7 @@ module Apruve
       :scheme => 'http',
       :host => 'localhost',
       :port => 3000,
-      :version => '3',
+      :version => 'v3',
   }
 
   class << self
@@ -23,7 +26,7 @@ module Apruve
     TEST = 'test'
     LOCAL = 'local'
 
-    def configure(api_key=nil, environment=PROD, options={})
+    def configure(api_key=nil, environment=LOCAL, options={})
       configure_environment environment
       @config = @config.merge(options)
       @client = Apruve::Client.new(api_key, @config)
@@ -63,26 +66,17 @@ module Apruve
 
     def configure_environment(env)
       if env == PROD
-        @config = {
-            :scheme => 'https',
-            :host => 'www.apruve.com',
-            :port => 443,
-            :version => '1',
-        }
+        @config[:scheme] = 'https'
+        @config[:host] = 'www.apruve.com'
+        @config[:port] = 443
       elsif env == TEST
-        @config = {
-            :scheme => 'https',
-            :host => 'test.apruve.com',
-            :port => 443,
-            :version => '1',
-        }
+        @config[:scheme] = 'https'
+        @config[:host] = 'test.apruve.com'
+        @config[:port] = 443
       elsif env == LOCAL
-        @config = {
-            :scheme => 'http',
-            :host => 'localhost',
-            :port => 3000,
-            :version => '1',
-        }
+        @config[:scheme] = 'http'
+        @config[:host] = 'localhost'
+        @config[:port] = 3000
       else
         raise 'unknown environment'
       end
