@@ -1,6 +1,6 @@
 module Apruve
   class PaymentRequest < ApruveObject
-    attr_accessor :merchant_id, :merchant_order_id, :amount_cents, :tax_cents,
+    attr_accessor :id, :merchant_id, :merchant_order_id, :status, :amount_cents, :tax_cents,
                   :shipping_cents, :line_items, :api_url, :view_url, :created_at, :updated_at
 
     def self.find(id)
@@ -8,9 +8,23 @@ module Apruve
       PaymentRequest.new(response.body)
     end
 
+    def self.finalize!(id)
+      response = Apruve.post("payment_requests/#{id}/finalize")
+      response.body
+    end
+
     def initialize(params)
       super
-      @line_items = [] if @line_items.nil?
+      # hydrate line items if appropriate
+      if @line_items.nil?
+        @line_items = []
+      elsif @line_items.is_a?(Array) && @line_items.first.is_a?(Hash)
+        hydrated_items = []
+        @line_items.each do |item|
+          hydrated_items << Apruve::LineItem.new(item)
+        end
+        @line_items = hydrated_items
+      end
     end
 
     def validate

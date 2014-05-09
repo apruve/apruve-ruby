@@ -63,7 +63,8 @@ module Apruve
       end
       conn.path_prefix = "/api/#{@config[:version]}"
       conn.headers['User-Agent'] = "apruve-ruby/#{Apruve::VERSION}"
-      conn.headers['Content-Type'] = "application/json;revision=#{@config[:version]}"
+      conn.headers['Content-Type'] = 'application/json'
+      # conn.headers['Content-Type'] = "application/json;revision=#{@config[:version]}"
       conn.headers['Accept'] = "#{@config[:accept_type]};revision=#{@config[:version]}"
     end
 

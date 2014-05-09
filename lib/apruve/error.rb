@@ -8,8 +8,8 @@ module Apruve
     def initialize(response=nil)
       @response = response
       unless response.nil?
-        # super error_message
-        super 'Error!'
+        super error_message
+        # super 'Error!'
       end
     end
 
@@ -22,28 +22,14 @@ module Apruve
     end
 
     def error_message
-      set_attrs
+      # set_attrs
       errors = body.fetch('errors', nil)
       unless errors.nil?
-        error = body[:errors][0]
-        extra = error[:additional] ? " -- #{error[:additional]}" : ""
-        "#{self.class.name}(#{response[:status]})::#{error[:status]}:: "\
+        error = errors[0][:error]
+        extra = error[:message] ? " -- #{error[:message]}" : ""
+        "#{self.class.name}(#{response[:status]}):: "\
         "#{response[:method].to_s.upcase} #{response[:url].to_s}: "\
-        "#{error[:category_code]}: #{error[:description]} #{extra}"
-      end
-    end
-
-    private
-    def set_attrs
-      errors = body.fetch('errors', nil)
-      unless errors.nil?
-        error = errors[0]
-        error.keys.each do |name|
-          self.class.instance_eval {
-            define_method(name) { error[name] } # Get.
-            define_method("#{name}?") { !!error[name] } # Present.
-          }
-        end
+        "#{error[:description]} #{extra}"
       end
     end
   end

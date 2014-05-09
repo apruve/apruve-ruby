@@ -41,6 +41,10 @@ module Apruve
       '<div id="apruveDiv"></div>'
     end
 
+    def default_currency
+      'USD'
+    end
+
     def get(*args, &block)
       self.client.get *args
     end
