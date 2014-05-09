@@ -1,5 +1,5 @@
 module Apruve
-  class Payment < ApruveObject
+  class Payment < Apruve::ApruveObject
     attr_accessor :id, :payment_request_id, :status, :status, :amount_cents, :currency, :merchant_notes,
                   :payment_items, :api_url, :view_url, :created_at, :updated_at
 

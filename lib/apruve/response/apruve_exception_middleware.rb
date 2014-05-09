@@ -1,5 +1,5 @@
 require 'faraday'
-require 'apruve/error'
+require_relative '../error'
 
 # @api private
 module Faraday

@@ -1,9 +1,10 @@
-$:.unshift(File.join(File.dirname(__FILE__), 'apruve', 'resources'))
-require 'validation_error'
-require 'apruve_object'
-require 'payment_request'
-require 'line_item'
-require 'payment'
-require 'payment_item'
-require 'subscription'
-require 'subscription_adjustment'
+# $:.unshift(File.join(File.dirname(__FILE__), 'apruve', 'resources'))
+
+require_relative 'resources/validation_error'
+require_relative 'resources/apruve_object'
+require_relative 'resources/payment_request'
+require_relative 'resources/line_item'
+require_relative 'resources/payment'
+require_relative 'resources/payment_item'
+require_relative 'resources/subscription'
+require_relative 'resources/subscription_adjustment'

@@ -2,8 +2,8 @@ require 'logger'
 require 'uri'
 require 'faraday'
 require 'faraday_middleware'
-require 'apruve_exception_middleware'
-require 'apruve_parse_json'
+require_relative 'response/apruve_exception_middleware'
+require_relative 'response/apruve_parse_json'
 
 module Apruve
   class Client

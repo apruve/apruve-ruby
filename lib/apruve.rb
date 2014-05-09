@@ -1,11 +1,11 @@
-$:.unshift File.join(File.dirname(__FILE__), 'apruve', 'resources')
-$:.unshift File.join(File.dirname(__FILE__), 'apruve', 'response')
+# $:.unshift File.join(File.dirname(__FILE__), 'apruve', 'resources')
+# $:.unshift File.join(File.dirname(__FILE__), 'apruve', 'response')
 
-require 'apruve/client'
-require 'apruve/version'
-require 'apruve/error'
-require 'apruve/faraday_error_handler'
-require 'apruve/utils'
+require_relative 'apruve/client'
+require_relative 'apruve/version'
+require_relative 'apruve/error'
+require_relative 'apruve/faraday_error_handler'
+require_relative 'apruve/utils'
 
 module Apruve
 
@@ -98,4 +98,4 @@ end
 
 # require all the resources! this is needed at the end because
 # the module needs to be defined first, as it contains the registry
-require 'apruve/resources'
+require_relative 'apruve/resources'
