@@ -32,5 +32,13 @@ module Apruve
     def to_json(*a)
       to_hash.to_json
     end
+
+    def self.logger
+      Apruve.client.config[:logger]
+    end
+
+    def logger
+      Apruve.client.config[:logger]
+    end
   end
 end

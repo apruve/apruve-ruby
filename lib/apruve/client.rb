@@ -37,6 +37,7 @@ module Apruve
       else
         logger = Logger.new(STDOUT)
         logger.level = Logger.const_get(config[:logging_level].to_s)
+        config[:logger] = logger
       end
 
       Faraday::Response.register_middleware :handle_apruve_errors => lambda { Faraday::Response::RaiseApruveError }
@@ -64,7 +65,6 @@ module Apruve
       conn.path_prefix = "/api/#{@config[:version]}"
       conn.headers['User-Agent'] = "apruve-ruby/#{Apruve::VERSION}"
       conn.headers['Content-Type'] = 'application/json'
-      # conn.headers['Content-Type'] = "application/json;revision=#{@config[:version]}"
       conn.headers['Accept'] = "#{@config[:accept_type]};revision=#{@config[:version]}"
     end
 

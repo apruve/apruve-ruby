@@ -5,11 +5,13 @@ module Apruve
 
     def self.find(id)
       response = Apruve.get("payment_requests/#{id}")
+      logger.debug response.body
       PaymentRequest.new(response.body)
     end
 
     def self.finalize!(id)
       response = Apruve.post("payment_requests/#{id}/finalize")
+      logger.debug response.body
       response.body
     end
 

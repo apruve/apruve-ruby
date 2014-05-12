@@ -32,7 +32,7 @@ module Apruve
 
     def save!
       validate
-      response = Apruve.post("payment_requests/#{payment_request_id}/payments", self.to_json)
+      response = Apruve.post("payment_requests/#{self.payment_request_id}/payments", self.to_json)
       self.id = response.body['id']
       self.status = response.body['status']
       self.api_url = response.body['api_url']
