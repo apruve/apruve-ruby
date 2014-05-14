@@ -1,4 +1,4 @@
-Copyright (c) 2014 Neal Tovsen
+Copyright (c) 2014 Apruve, Inc.
 
 MIT License
 
