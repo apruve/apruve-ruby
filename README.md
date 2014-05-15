@@ -71,13 +71,14 @@ Write a little Javascript to configure apruve.js
 2. set the payment request
 3. register a callback to capture apruve.paymentRequestId
 
-
+``` javascript
     apruve.secureHash = '<%= @payment_request.secure_hash %>';
     apruve.paymentRequest = <%= @payment_request.to_json %>;
     apruve.registerApruveCallback(apruve.APRUVE_COMPLETE_EVENT, function () {
         $('#paymentRequestId').val(apruve.paymentRequestId)
         $('#finishOrder').submit();
     });
+```
 
 Decide where to put the Apruve button
 
