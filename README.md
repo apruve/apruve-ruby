@@ -32,10 +32,10 @@ test.apruve.com for test accounts.
 
 ### Initialize the library
 
-For test.apruve.com
+For [test.apruve.com]
     Apruve.configure('YOUR_APRUVE_API_KEY', 'test')
 
-For www.apruve.com
+For [www.apruve.com]
     Apruve.configure('YOUR_APRUVE_API_KEY', 'prod')
 
 ### Create a PaymentRequest
