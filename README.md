@@ -71,6 +71,7 @@ Write a little Javascript to configure apruve.js
 2. set the payment request
 3. register a callback so you can get the paymentRequestId and post it to your server (example uses a hidden form with id=finishOrder)
 
+
     apruve.secureHash = '<%= @payment_request.secure_hash %>';
     apruve.paymentRequest = <%= @payment_request.to_json %>;
     apruve.registerApruveCallback(apruve.APRUVE_COMPLETE_EVENT, function () {
