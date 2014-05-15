@@ -86,7 +86,7 @@ Decide where to put the Apruve button
 
 ### Back on your server...
 
-Then use the paymentRequestId to create a Payment
+Use the paymentRequestId to create a Payment
 
     apruve_payment = Apruve::Payment.new(payment_request_id: params[:payment_request_id], amount_cents: 12345)
     apruve_payment.save!
