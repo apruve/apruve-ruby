@@ -86,12 +86,6 @@ Decide where to put the Apruve button
 
 ### Back on your server...
 
-(optional) If you track orders separately from payments, save the paymentRequestId with your order in your database
-
-    # dependent on your system, but something like this...
-    my_order.apruve_payment_request = params[:payment_request_id]
-    my_order.save
-
 Then use the paymentRequestId to create a Payment
 
     apruve_payment = Apruve::Payment.new(payment_request_id: params[:payment_request_id], amount_cents: 12345)
@@ -103,6 +97,12 @@ Save the status and the payment ID with the payment in your database
     my_payment.apruve_payment_id = apruve_payment.id
     my_payment.apruve_payment_status = apruve_payment.status
     my_payment.save!
+
+(optional) If you track orders separately from payments, save the paymentRequestId with your order in your database
+
+    # dependent on your system, but something like this...
+    my_order.apruve_payment_request = params[:payment_request_id]
+    my_order.save
 
 ### Create a web hook listener
 
