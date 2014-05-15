@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    apruve (0.0.1)
+    apruve (0.9.1)
       addressable (~> 2.3.5)
       faraday (>= 0.8.6, <= 0.9.0)
       faraday_middleware (~> 0.9.0)

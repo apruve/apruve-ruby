@@ -1,6 +1,6 @@
 module Apruve
   class PaymentRequest < Apruve::ApruveObject
-    attr_accessor :id, :merchant_id, :merchant_order_id, :status, :amount_cents, :tax_cents,
+    attr_accessor :id, :merchant_id, :merchant_order_id, :status, :amount_cents, :currency, :tax_cents,
                   :shipping_cents, :line_items, :api_url, :view_url, :created_at, :updated_at
 
     def self.find(id)
@@ -36,18 +36,17 @@ module Apruve
     end
 
     def value_string
-      token_string = to_hash.map do |k, v|
-        str = ''
-        if v.kind_of?(Array)
-          v.each do |item|
-            str = str + item.map{|q,r| r}.join
-          end
-        else
-          str = v
-        end
-        str
+      # add each field in the PR
+      str = "#{self.merchant_id}#{self.merchant_order_id}#{self.amount_cents}#{self.currency}#{self.tax_cents}#{self.shipping_cents}"
+
+      # add the line items
+      self.line_items.each do |item|
+        str += "#{item.title}#{item.plan_code}#{item.amount_cents}#{item.price_ea_cents}"\
+        "#{item.quantity}#{item.merchant_notes}#{item.description}#{item.variant_info}#{item.sku}"\
+        "#{item.vendor}#{item.view_product_url}"
       end
-      token_string.join
+
+      str
     end
 
     def secure_hash
