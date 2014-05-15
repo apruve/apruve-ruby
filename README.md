@@ -23,7 +23,7 @@ Or install it yourself as:
 The following snippets are based on our apruve-ruby-demo project, which is a functional demo of how a merchant can
 integrate Apruve.
 
-[https://github.com/apruve/apruve-ruby-demo]
+[https://github.com/apruve/apruve-ruby-demo](https://github.com/apruve/apruve-ruby-demo)
 
 ### Create an account on Apruve.
 
@@ -32,10 +32,10 @@ test.apruve.com for test accounts.
 
 ### Initialize the library
 
-For [test.apruve.com]
+For [test.apruve.com](test.apruve.com)
     Apruve.configure('YOUR_APRUVE_API_KEY', 'test')
 
-For [www.apruve.com]
+For [www.apruve.com](www.apruve.com)
     Apruve.configure('YOUR_APRUVE_API_KEY', 'prod')
 
 ### Create a PaymentRequest
