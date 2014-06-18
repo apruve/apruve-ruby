@@ -1,7 +1,7 @@
 module Apruve
   class SubscriptionAdjustment < Apruve::ApruveObject
     attr_accessor :id, :subscription_id, :status, :title, :amount_cents, :price_ea_cents, :quantity, :description,
-                  :variant_info, :sku, :vendor, :view_product_url
+                  :variant_info, :sku, :vendor, :view_product_url, :api_url
 
     def self.find(subscription_id, id)
       response = Apruve.get("subscriptions/#{subscription_id}/adjustments/#{id}")
