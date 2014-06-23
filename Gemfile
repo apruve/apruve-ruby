@@ -16,14 +16,11 @@ group :development do
 end
 
 group :test do
-
-  gem 'ruby-debug-base19x'
-  gem 'ruby-debug-ide'
-
   gem 'faker'
   gem 'net-http-persistent'
-  gem 'rspec', '~> 2.14.1'
-  gem 'rake', '~> 10.0.3'
-  gem 'vcr', '~> 2.4.0'
+  gem 'rspec'
+  gem 'rspec-its'
+  gem 'rake'
+  gem 'vcr'
   gem 'webmock'
 end

@@ -19,9 +19,9 @@ Gem::Specification.new do |gem|
   gem.require_paths = ['lib']
 
   gem.add_development_dependency 'bundler', '~> 1.5'
-  gem.add_development_dependency 'rake'
+  gem.add_development_dependency 'rake', '~> 10.3'
 
   gem.add_dependency('faraday', ['>= 0.8.6', '<= 0.9.0'])
-  gem.add_dependency('faraday_middleware', '~> 0.9.0')
-  gem.add_dependency('addressable', '~> 2.3.5')
+  gem.add_dependency('faraday_middleware', '~> 0.9')
+  gem.add_dependency('addressable', '~> 2.3')
 end

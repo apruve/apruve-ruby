@@ -9,6 +9,7 @@ end
 require 'rubygems'
 require 'faker'
 require 'vcr'
+require 'rspec/its'
 
 RSpec.configure do |config|
   # config.include Rack::Test::Methods

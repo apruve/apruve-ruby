@@ -34,9 +34,9 @@ describe Faraday::Response::RaiseApruveError, :type => :response do
                             })]
       }
 
-      lambda {
+      expect {
         connection.get('/error')
-      }.should raise_error(Apruve::BadRequest)
+      }.to raise_error(Apruve::BadRequest)
     end
 
   end
