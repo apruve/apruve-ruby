@@ -58,7 +58,7 @@ module Apruve
     end
 
     def unstore(*args, &block)
-      self.client.unstore *args
+      self.client.delete *args
     end
 
     alias_method :delete, :unstore

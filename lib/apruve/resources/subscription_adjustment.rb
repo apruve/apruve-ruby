@@ -9,6 +9,12 @@ module Apruve
       SubscriptionAdjustment.new(response.body)
     end
 
+    def self.delete(subscription_id, id)
+      response = Apruve.delete("subscriptions/#{subscription_id}/adjustments/#{id}")
+      logger.debug response.body
+      nil
+    end
+
     def self.find_all(subscription_id)
       response = Apruve.get("subscriptions/#{subscription_id}/adjustments")
       logger.debug response.body
@@ -25,9 +31,7 @@ module Apruve
     end
 
     def delete!
-      response = Apruve.delete("subscriptions/#{self.subscription_id}/adjustments/#{id}")
-      logger.debug response.body
-      nil
+      SubscriptionAdjustment.delete self.subscription_id, self.id
     end
   end
 end
