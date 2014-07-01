@@ -122,6 +122,12 @@ describe Apruve::SubscriptionAdjustment do
         stubs.verify_stubbed_calls
       end
     end
+    describe 'not saved' do
+      it 'should raise' do
+        adjustment.id = nil
+        expect {adjustment.delete!}.to raise_error('SubscriptionAdjustment has not been saved')
+      end
+    end
   end
 
   describe '#find_all' do
