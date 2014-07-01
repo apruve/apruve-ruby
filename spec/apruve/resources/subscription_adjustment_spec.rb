@@ -21,6 +21,7 @@ describe Apruve::SubscriptionAdjustment do
   let (:merchant_notes) { 'merchant notes' }
   let (:adjustment) do
     Apruve::SubscriptionAdjustment.new(
+        id: id,
         subscription_id: subscription_id,
         title: title,
         amount_cents: amount_cents,
