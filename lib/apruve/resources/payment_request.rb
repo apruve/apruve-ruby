@@ -1,7 +1,7 @@
 module Apruve
   class PaymentRequest < Apruve::ApruveObject
     attr_accessor :id, :merchant_id, :merchant_order_id, :status, :amount_cents, :currency, :tax_cents,
-                  :shipping_cents, :line_items, :api_url, :view_url, :created_at, :updated_at
+                  :shipping_cents, :line_items, :api_url, :view_url, :created_at, :updated_at, :expire_at
 
     def self.find(id)
       response = Apruve.get("payment_requests/#{id}")
@@ -37,7 +37,7 @@ module Apruve
 
     def value_string
       # add each field in the PR
-      str = "#{self.merchant_id}#{self.merchant_order_id}#{self.amount_cents}#{self.currency}#{self.tax_cents}#{self.shipping_cents}"
+      str = "#{self.merchant_id}#{self.merchant_order_id}#{self.amount_cents}#{self.currency}#{self.tax_cents}#{self.shipping_cents}#{self.expire_at}"
 
       # add the line items
       self.line_items.each do |item|

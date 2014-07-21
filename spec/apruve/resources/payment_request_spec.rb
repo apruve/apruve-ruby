@@ -32,6 +32,7 @@ describe Apruve::PaymentRequest do
         amount_cents: 12340,
         tax_cents: 0,
         shipping_cents: 0,
+        expire_at: '2014-07-22T00:00:00+00:00',
         line_items: line_items
     )
   end
@@ -51,7 +52,7 @@ describe Apruve::PaymentRequest do
   describe '#to_json' do
     let(:expected) do
       "{\"merchant_id\":\"9999\",\"merchant_order_id\":\"ABC\",\"amount_cents\":12340,\"tax_cents\":0,"\
-      "\"shipping_cents\":0,\"line_items\":[{\"title\":\"line 1\",\"amount_cents\":\"1230\","\
+      "\"shipping_cents\":0,\"expire_at\":\"2014-07-22T00:00:00+00:00\",\"line_items\":[{\"title\":\"line 1\",\"amount_cents\":\"1230\","\
       "\"price_ea_cents\":\"123\",\"quantity\":10,\"description\":\"A line item\",\"variant_info\":\"small\","\
       "\"sku\":\"LINE1SKU\",\"vendor\":\"acme, inc.\",\"view_product_url\":\"http://www.apruve.com/doc\"},"\
       "{\"title\":\"line 2\",\"amount_cents\":\"40\"}]}"
@@ -61,7 +62,7 @@ describe Apruve::PaymentRequest do
 
   describe '#value_string' do
     let(:expected) do
-      "9999ABC1234000line 1123012310A line itemsmallLINE1SKUacme, inc.http://www.apruve.com/docline 240"
+      '9999ABC12340002014-07-22T00:00:00+00:00line 1123012310A line itemsmallLINE1SKUacme, inc.http://www.apruve.com/docline 240'
     end
     its(:value_string) { should eq expected }
   end
@@ -77,7 +78,7 @@ describe Apruve::PaymentRequest do
       end
     end
     describe 'with api_key' do
-      let (:hash) { '527cf4d85ed1e977c89a1099197d90f00aab9eda1fd3f97538b7e0909593f07f' }
+      let (:hash) { '7a4df9a9a47e88c3c1957853341d5e9a1abc2028ede3a0a9e4f894a2925a187f' }
       let (:api_key) { 'an_api_key' }
       before :each do
         Apruve.configure(api_key)
