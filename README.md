@@ -47,7 +47,7 @@ For [www.apruve.com](www.apruve.com)
           shipping_cents: 500
       )
 
-    @payment_request.line_items << Apruve::LineItem.new(
+    @payment_request.order_items << Apruve::LineItem.new(
           title: 'Letter Paper',
           description: '20 lb ream (500 Sheets). Paper dimensions are 8.5 x 11.00 inches.',
           sku: 'LTR-20R',

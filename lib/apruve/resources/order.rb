@@ -1,16 +1,17 @@
 module Apruve
-  class PaymentRequest < Apruve::ApruveObject
-    attr_accessor :id, :merchant_id, :merchant_order_id, :status, :amount_cents, :currency, :tax_cents,
-                  :shipping_cents, :line_items, :api_url, :view_url, :created_at, :updated_at, :expire_at
+  class Order < Apruve::ApruveObject
+    attr_accessor :id, :merchant_id, :customer_id, :merchant_order_id, :status, :amount_cents, :currency, :tax_cents,
+                  :shipping_cents, :expire_at, :order_items, :accepts_payments_via, :accepts_payment_terms, :payment_terms,
+                  :created_at, :updated_at, :final_state_at, :default_payment_method, :links
 
     def self.find(id)
-      response = Apruve.get("payment_requests/#{id}")
+      response = Apruve.get("orders/#{id}")
       logger.debug response.body
-      PaymentRequest.new(response.body)
+      Order.new(response.body)
     end
 
     def self.finalize!(id)
-      response = Apruve.post("payment_requests/#{id}/finalize")
+      response = Apruve.post("orders/#{id}/finalize")
       logger.debug response.body
       response.body
     end
@@ -18,14 +19,14 @@ module Apruve
     def initialize(params)
       super
       # hydrate line items if appropriate
-      if @line_items.nil?
-        @line_items = []
-      elsif @line_items.is_a?(Array) && @line_items.first.is_a?(Hash)
+      if @order_items.nil?
+        @order_items = []
+      elsif @order_items.is_a?(Array) && @order_items.first.is_a?(Hash)
         hydrated_items = []
-        @line_items.each do |item|
-          hydrated_items << Apruve::LineItem.new(item)
+        @order_items.each do |item|
+          hydrated_items << Apruve::OrderItem.new(item)
         end
-        @line_items = hydrated_items
+        @order_items = hydrated_items
       end
     end
 
@@ -40,7 +41,7 @@ module Apruve
       str = "#{self.merchant_id}#{self.merchant_order_id}#{self.amount_cents}#{self.currency}#{self.tax_cents}#{self.shipping_cents}#{self.expire_at}"
 
       # add the line items
-      self.line_items.each do |item|
+      self.order_items.each do |item|
         str += "#{item.title}#{item.plan_code}#{item.amount_cents}#{item.price_ea_cents}"\
         "#{item.quantity}#{item.merchant_notes}#{item.description}#{item.variant_info}#{item.sku}"\
         "#{item.vendor}#{item.view_product_url}"

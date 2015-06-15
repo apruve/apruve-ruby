@@ -11,7 +11,7 @@ module Apruve
         :scheme => 'http',
         :host => 'localhost',
         :port => 3000,
-        :version => 'v3',
+        :version => 'v4',
         :logging_level => 'WARN',
         :connection_timeout => 60,
         :read_timeout => 60,

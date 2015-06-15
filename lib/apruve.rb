@@ -14,7 +14,7 @@ module Apruve
       :scheme => 'http',
       :host => 'localhost',
       :port => 3000,
-      :version => 'v3',
+      :version => 'v4',
   }
 
   class << self

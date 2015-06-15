@@ -1,13 +1,13 @@
 require 'spec_helper'
 
-describe Apruve::PaymentRequest do
+describe Apruve::Order do
   before :each do
     Apruve.configure('f5fbe71d68772d1f562ed6f598b995b3', 'local')
   end
 
-  let (:line_items) do
+  let (:order_items) do
     [
-        Apruve::LineItem.new(
+        Apruve::OrderItem.new(
             title: 'line 1',
             amount_cents: '1230',
             price_ea_cents: '123',
@@ -18,7 +18,7 @@ describe Apruve::PaymentRequest do
             vendor: 'acme, inc.',
             view_product_url: 'http://www.apruve.com/doc'
         ),
-        Apruve::LineItem.new(
+        Apruve::OrderItem.new(
             title: 'line 2',
             amount_cents: '40'
         )
@@ -26,14 +26,14 @@ describe Apruve::PaymentRequest do
   end
 
   let (:payment_request) do
-    Apruve::PaymentRequest.new(
+    Apruve::Order.new(
         merchant_id: '9999',
         merchant_order_id: 'ABC',
         amount_cents: 12340,
         tax_cents: 0,
         shipping_cents: 0,
         expire_at: '2014-07-22T00:00:00+00:00',
-        line_items: line_items
+        order_items: order_items
     )
   end
   subject { payment_request }
@@ -43,16 +43,15 @@ describe Apruve::PaymentRequest do
   it { should respond_to(:amount_cents) }
   it { should respond_to(:tax_cents) }
   it { should respond_to(:shipping_cents) }
-  it { should respond_to(:line_items) }
-  it { should respond_to(:api_url) }
-  it { should respond_to(:view_url) }
+  it { should respond_to(:order_items) }
+  it { should respond_to(:links) }
   it { should respond_to(:created_at) }
   it { should respond_to(:updated_at) }
 
   describe '#to_json' do
     let(:expected) do
       "{\"merchant_id\":\"9999\",\"merchant_order_id\":\"ABC\",\"amount_cents\":12340,\"tax_cents\":0,"\
-      "\"shipping_cents\":0,\"expire_at\":\"2014-07-22T00:00:00+00:00\",\"line_items\":[{\"title\":\"line 1\",\"amount_cents\":\"1230\","\
+      "\"shipping_cents\":0,\"expire_at\":\"2014-07-22T00:00:00+00:00\",\"order_items\":[{\"title\":\"line 1\",\"amount_cents\":\"1230\","\
       "\"price_ea_cents\":\"123\",\"quantity\":10,\"description\":\"A line item\",\"variant_info\":\"small\","\
       "\"sku\":\"LINE1SKU\",\"vendor\":\"acme, inc.\",\"view_product_url\":\"http://www.apruve.com/doc\"},"\
       "{\"title\":\"line 2\",\"amount_cents\":\"40\"}]}"
@@ -110,11 +109,11 @@ describe Apruve::PaymentRequest do
     describe 'success' do
       let! (:stubs) do
         faraday_stubs do |stub|
-          stub.get("/api/v3/payment_requests/#{id}") { [200, {}, '{}'] }
+          stub.get("/api/v4/orders/#{id}") { [200, {}, '{}'] }
         end
       end
       it 'should do a get' do
-        Apruve::PaymentRequest.find(id)
+        Apruve::Order.find(id)
         stubs.verify_stubbed_calls
       end
     end
@@ -122,11 +121,11 @@ describe Apruve::PaymentRequest do
     describe 'not found' do
       let! (:stubs) do
         faraday_stubs do |stub|
-          stub.get("/api/v3/payment_requests/#{id}") { [404, {}, 'Not Found'] }
+          stub.get("/api/v4/orders/#{id}") { [404, {}, 'Not Found'] }
         end
       end
       it 'should raise' do
-        expect { Apruve::PaymentRequest.find(id) }.to raise_error(Apruve::NotFound)
+        expect { Apruve::Order.find(id) }.to raise_error(Apruve::NotFound)
         stubs.verify_stubbed_calls
       end
     end

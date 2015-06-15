@@ -53,7 +53,7 @@ describe Apruve::SubscriptionAdjustment do
     describe 'success' do
       let! (:stubs) do
         faraday_stubs do |stub|
-          stub.get("/api/v3/subscriptions/#{subscription_id}/adjustments/#{id}") { [200, {}, '{}'] }
+          stub.get("/api/v4/subscriptions/#{subscription_id}/adjustments/#{id}") { [200, {}, '{}'] }
         end
       end
       it 'should do a get' do
@@ -64,7 +64,7 @@ describe Apruve::SubscriptionAdjustment do
     describe 'not found' do
       let! (:stubs) do
         faraday_stubs do |stub|
-          stub.get("/api/v3/subscriptions/#{subscription_id}/adjustments/#{id}") { [404, {}, 'Not Found'] }
+          stub.get("/api/v4/subscriptions/#{subscription_id}/adjustments/#{id}") { [404, {}, 'Not Found'] }
         end
       end
       it 'should raise' do
@@ -78,7 +78,7 @@ describe Apruve::SubscriptionAdjustment do
     describe 'success' do
       let! (:stubs) do
         faraday_stubs do |stub|
-          stub.delete("/api/v3/subscriptions/#{subscription_id}/adjustments/#{id}") { [200, {}, '{}'] }
+          stub.delete("/api/v4/subscriptions/#{subscription_id}/adjustments/#{id}") { [200, {}, '{}'] }
         end
       end
       it 'should do a delete' do
@@ -89,7 +89,7 @@ describe Apruve::SubscriptionAdjustment do
     describe 'not found' do
       let! (:stubs) do
         faraday_stubs do |stub|
-          stub.delete("/api/v3/subscriptions/#{subscription_id}/adjustments/#{id}") { [404, {}, 'Not Found'] }
+          stub.delete("/api/v4/subscriptions/#{subscription_id}/adjustments/#{id}") { [404, {}, 'Not Found'] }
         end
       end
       it 'should raise' do
@@ -103,7 +103,7 @@ describe Apruve::SubscriptionAdjustment do
     describe 'success' do
       let! (:stubs) do
         faraday_stubs do |stub|
-          stub.delete("/api/v3/subscriptions/#{adjustment.subscription_id}/adjustments/#{adjustment.id}") { [200, {}, '{}'] }
+          stub.delete("/api/v4/subscriptions/#{adjustment.subscription_id}/adjustments/#{adjustment.id}") { [200, {}, '{}'] }
         end
       end
       it 'should do a delete' do
@@ -114,7 +114,7 @@ describe Apruve::SubscriptionAdjustment do
     describe 'not found' do
       let! (:stubs) do
         faraday_stubs do |stub|
-          stub.delete("/api/v3/subscriptions/#{adjustment.subscription_id}/adjustments/#{adjustment.id}") { [404, {}, 'Not Found'] }
+          stub.delete("/api/v4/subscriptions/#{adjustment.subscription_id}/adjustments/#{adjustment.id}") { [404, {}, 'Not Found'] }
         end
       end
       it 'should raise' do
@@ -134,7 +134,7 @@ describe Apruve::SubscriptionAdjustment do
     describe 'success' do
       let! (:stubs) do
         faraday_stubs do |stub|
-          stub.get("/api/v3/subscriptions/#{subscription_id}/adjustments") { [200, {}, '{}'] }
+          stub.get("/api/v4/subscriptions/#{subscription_id}/adjustments") { [200, {}, '{}'] }
         end
       end
       it 'should do a get' do
@@ -145,7 +145,7 @@ describe Apruve::SubscriptionAdjustment do
     describe 'not found' do
       let! (:stubs) do
         faraday_stubs do |stub|
-          stub.get("/api/v3/subscriptions/#{subscription_id}/adjustments") { [404, {}, 'Not Found'] }
+          stub.get("/api/v4/subscriptions/#{subscription_id}/adjustments") { [404, {}, 'Not Found'] }
         end
       end
       it 'should raise' do
@@ -175,7 +175,7 @@ describe Apruve::SubscriptionAdjustment do
       let! (:stubs) do
         faraday_stubs do |stub|
           stub.post(
-              "/api/v3/subscriptions/#{subscription_id}/adjustments", adjustment.to_json) { [200, {}, response.to_json] }
+              "/api/v4/subscriptions/#{subscription_id}/adjustments", adjustment.to_json) { [200, {}, response.to_json] }
         end
       end
       it 'should do a post' do
@@ -187,7 +187,7 @@ describe Apruve::SubscriptionAdjustment do
       let! (:stubs) do
         faraday_stubs do |stub|
           stub.post(
-              "/api/v3/subscriptions/#{subscription_id}/adjustments", adjustment.to_json) { [404, {}, 'Not Found'] }
+              "/api/v4/subscriptions/#{subscription_id}/adjustments", adjustment.to_json) { [404, {}, 'Not Found'] }
         end
       end
       it 'should raise' do
