@@ -37,5 +37,12 @@ module Apruve
       self.status = response.body['status']
       self.status
     end
+
+    def issue!
+      validate
+      response = Apruve.post("invoices/#{id}/issue", self.to_json)
+      self.status = response.body['status']
+      self.status
+    end
   end
 end
