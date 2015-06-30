@@ -8,35 +8,35 @@ describe 'Apruve' do
 
   describe '#js' do
     describe 'test' do
-      let (:script_tag) { '<script type="text/javascript" src="https://test.apruve.com/js/apruve.js"></script>' }
+      let (:script_tag) { '<script type="text/javascript" src="https://test.apruve.com/js/v4/apruve.js"></script>' }
       it 'should print the tag' do
         Apruve.configure(nil, 'test')
         expect(Apruve.js).to eq script_tag
       end
     end
     describe 'prod' do
-      let (:script_tag) { '<script type="text/javascript" src="http://localhost:3000/js/apruve.js"></script>' }
+      let (:script_tag) { '<script type="text/javascript" src="http://localhost:3000/js/v4/apruve.js"></script>' }
       it 'should print the tag' do
         Apruve.configure(nil)
         expect(Apruve.js).to eq script_tag
       end
     end
     describe 'local' do
-      let (:script_tag) { '<script type="text/javascript" src="https://www.apruve.com/js/apruve.js"></script>' }
+      let (:script_tag) { '<script type="text/javascript" src="https://www.apruve.com/js/v4/apruve.js"></script>' }
       it 'should print the tag' do
         Apruve.configure(nil, 'prod')
         expect(Apruve.js).to eq script_tag
       end
     end
     describe 'compact' do
-      let (:script_tag) { '<script type="text/javascript" src="http://localhost:3000/js/apruve.js?display=compact"></script>' }
+      let (:script_tag) { '<script type="text/javascript" src="http://localhost:3000/js/v4/apruve.js?display=compact"></script>' }
       it 'should print the tag' do
         Apruve.configure(nil)
         expect(Apruve.js('compact')).to eq script_tag
       end
     end
     describe 'overrides' do
-      let (:script_tag) { '<script type="text/javascript" src="mailto://google.com:4567/js/apruve.js"></script>' }
+      let (:script_tag) { '<script type="text/javascript" src="mailto://google.com:4567/js/v4/apruve.js"></script>' }
       it 'should print the tag' do
         Apruve.configure(nil, 'prod', {scheme: 'mailto', host: 'google.com', port: 4567})
         expect(Apruve.js).to eq script_tag

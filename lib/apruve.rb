@@ -88,7 +88,7 @@ module Apruve
 
     def js_url
       port_param = [443, 80].include?(@config[:port]) ? '' : ":#{@config[:port]}"
-      "#{@config[:scheme]}://#{@config[:host]}#{port_param}/js/apruve.js"
+      "#{@config[:scheme]}://#{@config[:host]}#{port_param}/js/v4/apruve.js"
     end
   end
 
