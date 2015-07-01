@@ -127,4 +127,165 @@ describe Apruve::Invoice do
       end
     end
   end
+
+  describe '#issue' do
+    let (:id) { '89ea2488fe0a5c7bb38aa7f9b088874a' }
+    let (:status) { 'open' }
+    let (:api_url) { Faker::Internet.url }
+    let (:view_url) { Faker::Internet.url }
+    let (:response) do
+      {
+          id: id,
+          status: status,
+          api_url: api_url,
+          view_url: view_url
+      }
+    end
+    let (:invoice) { Apruve::Invoice.new({id: id, order_id: order_id, amount_cents: amount_cents})}
+    describe 'success' do
+      let! (:stubs) do
+        faraday_stubs do |stub|
+          stub.post("/api/v4/invoices/#{id}/issue") { [200, {}, response.to_json] }
+        end
+      end
+      it 'should do a post' do
+        invoice.issue!
+        expect(invoice.id).to eq id
+        expect(invoice.status).to eq status
+        stubs.verify_stubbed_calls
+      end
+    end
+
+    describe 'invoice request not found' do
+      let! (:stubs) do
+        faraday_stubs do |stub|
+          stub.post("/api/v4/invoices/#{id}/issue") { [404, {}, 'Not Found'] }
+        end
+      end
+      it 'should raise' do
+        expect { invoice.issue! }.to raise_error(Apruve::NotFound)
+        stubs.verify_stubbed_calls
+      end
+    end
+  end
+
+  describe '#update' do
+    let (:id) { '89ea2488fe0a5c7bb38aa7f9b088874a' }
+    let (:status) { 'pending' }
+    let (:api_url) { Faker::Internet.url }
+    let (:view_url) { Faker::Internet.url }
+    let (:response) do
+      {
+          id: id,
+          status: status,
+          api_url: api_url,
+          view_url: view_url
+      }
+    end
+    let (:invoice) { Apruve::Invoice.new({id: id, order_id: order_id, amount_cents: amount_cents})}
+    describe 'success' do
+      let! (:stubs) do
+        faraday_stubs do |stub|
+          stub.patch("/api/v4/invoices/#{id}", invoice.to_json) { [200, {}, response.to_json] }
+        end
+      end
+      it 'should do a patch' do
+        invoice.update!
+        expect(invoice.status).to eq status
+        stubs.verify_stubbed_calls
+      end
+    end
+
+    describe 'invoice request not found' do
+      let! (:stubs) do
+        faraday_stubs do |stub|
+          stub.patch("/api/v4/invoices/#{id}", invoice.to_json) { [404, {}, 'Not Found'] }
+        end
+      end
+      it 'should raise' do
+        expect { invoice.update! }.to raise_error(Apruve::NotFound)
+        stubs.verify_stubbed_calls
+      end
+    end
+  end
+
+  describe '#close' do
+    let (:id) { '89ea2488fe0a5c7bb38aa7f9b088874a' }
+    let (:status) { 'pending' }
+    let (:api_url) { Faker::Internet.url }
+    let (:view_url) { Faker::Internet.url }
+    let (:response) do
+      {
+          id: id,
+          status: status,
+          api_url: api_url,
+          view_url: view_url
+      }
+    end
+    let (:invoice) { Apruve::Invoice.new({id: id, order_id: order_id, amount_cents: amount_cents})}
+    describe 'success' do
+      let! (:stubs) do
+        faraday_stubs do |stub|
+          stub.post("/api/v4/invoices/#{id}/close") { [200, {}, response.to_json] }
+        end
+      end
+      it 'should do a post' do
+        invoice.close!
+        expect(invoice.status).to eq status
+        stubs.verify_stubbed_calls
+      end
+    end
+
+    describe 'invoice request not found' do
+      let! (:stubs) do
+        faraday_stubs do |stub|
+          stub.post("/api/v4/invoices/#{id}/close") { [404, {}, 'Not Found'] }
+        end
+      end
+      it 'should raise' do
+        expect { invoice.close! }.to raise_error(Apruve::NotFound)
+        stubs.verify_stubbed_calls
+      end
+    end
+  end
+
+  describe '#cancel' do
+    let (:id) { '89ea2488fe0a5c7bb38aa7f9b088874a' }
+    let (:status) { 'pending' }
+    let (:api_url) { Faker::Internet.url }
+    let (:view_url) { Faker::Internet.url }
+    let (:response) do
+      {
+          id: id,
+          status: status,
+          api_url: api_url,
+          view_url: view_url
+      }
+    end
+    let (:invoice) { Apruve::Invoice.new({id: id, order_id: order_id, amount_cents: amount_cents})}
+    describe 'success' do
+      let! (:stubs) do
+        faraday_stubs do |stub|
+          stub.post("/api/v4/invoices/#{id}/cancel") { [200, {}, response.to_json] }
+        end
+      end
+      it 'should do a post' do
+        invoice.cancel!
+        expect(invoice.status).to eq status
+        stubs.verify_stubbed_calls
+      end
+    end
+
+    describe 'invoice request not found' do
+      let! (:stubs) do
+        faraday_stubs do |stub|
+          stub.post("/api/v4/invoices/#{id}/cancel") { [404, {}, 'Not Found'] }
+        end
+      end
+      it 'should raise' do
+        expect { invoice.cancel! }.to raise_error(Apruve::NotFound)
+        stubs.verify_stubbed_calls
+      end
+    end
+  end
 end

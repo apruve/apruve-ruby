@@ -38,9 +38,30 @@ module Apruve
       self.status
     end
 
+    def update!
+      validate
+      response = Apruve.patch("invoices/#{id}", self.to_json)
+      self.status = response.body['status']
+      self.status
+    end
+
     def issue!
       validate
-      response = Apruve.post("invoices/#{id}/issue", self.to_json)
+      response = Apruve.post("invoices/#{id}/issue")
+      self.status = response.body['status']
+      self.status
+    end
+
+    def close!
+      validate
+      response = Apruve.post("invoices/#{id}/close")
+      self.status = response.body['status']
+      self.status
+    end
+
+    def cancel!
+      validate
+      response = Apruve.post("invoices/#{id}/cancel")
       self.status = response.body['status']
       self.status
     end

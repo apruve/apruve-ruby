@@ -57,6 +57,10 @@ module Apruve
       self.client.put *args
     end
 
+    def patch(*args, &block)
+      self.client.patch *args
+    end
+
     def unstore(*args, &block)
       self.client.delete *args
     end

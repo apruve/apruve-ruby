@@ -13,7 +13,13 @@ module Apruve
     def self.finalize!(id)
       response = Apruve.post("orders/#{id}/finalize")
       logger.debug response.body
-      response.body
+      Order.new(response.body)
+    end
+    
+    def update!
+      response = Apruve.patch("orders/#{id}", self.to_json)
+      logger.debug response.body
+      initialize response.body
     end
 
     def initialize(params)

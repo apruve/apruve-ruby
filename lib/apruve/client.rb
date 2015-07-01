@@ -88,7 +88,7 @@ module Apruve
     private
 
     def is_http_method? method
-      [:get, :post, :put, :delete].include? method
+      [:get, :post, :put, :delete, :patch].include? method
     end
 
     def respond_to?(method, include_private = false)
