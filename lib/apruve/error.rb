@@ -26,8 +26,8 @@ module Apruve
       errors = body.fetch('errors', nil)
       unless errors.nil?
         error = errors[0]
-        extra = error[:detail] ? " -- #{error[:detail]}" : ""
-        extra += error[:source] ? " -- #{error[:source][:parameter]}" : ""
+        extra = error[:source] ? " -- #{error[:source][:parameter]}" : ""
+        extra += error[:detail] ? " -- #{error[:detail]}" : ""
         "#{self.class.name}(#{response[:status]}):: "\
         "#{response[:method].to_s.upcase} #{response[:url].to_s}: "\
         "#{error[:title]} #{extra}"
