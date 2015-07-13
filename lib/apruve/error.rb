@@ -25,11 +25,12 @@ module Apruve
       # set_attrs
       errors = body.fetch('errors', nil)
       unless errors.nil?
-        error = errors[0][:error]
-        extra = error[:message] ? " -- #{error[:message]}" : ""
+        error = errors[0]
+        extra = error[:detail] ? " -- #{error[:detail]}" : ""
+        extra += error[:source] ? " -- #{error[:source][:parameter]}" : ""
         "#{self.class.name}(#{response[:status]}):: "\
         "#{response[:method].to_s.upcase} #{response[:url].to_s}: "\
-        "#{error[:description]} #{extra}"
+        "#{error[:title]} #{extra}"
       end
     end
   end
