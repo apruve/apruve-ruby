@@ -1,5 +1,5 @@
 module Apruve
-  class Subscription < Apruve::LineItem
+  class Subscription < Apruve::OrderItem
     attr_accessor :id, :start_at, :next_charge_at, :last_charge_at, :end_at, :canceled_at
 
     def self.find(id)

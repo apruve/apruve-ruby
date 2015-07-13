@@ -41,7 +41,7 @@ describe Apruve::Subscription do
     describe 'success' do
       let! (:stubs) do
         faraday_stubs do |stub|
-          stub.get("/api/v3/subscriptions/#{id}") { [200, {}, '{}'] }
+          stub.get("/api/v4/subscriptions/#{id}") { [200, {}, '{}'] }
         end
       end
       it 'should do a get' do
@@ -53,7 +53,7 @@ describe Apruve::Subscription do
     describe 'not found' do
       let! (:stubs) do
         faraday_stubs do |stub|
-          stub.get("/api/v3/subscriptions/#{id}") { [404, {}, 'Not Found'] }
+          stub.get("/api/v4/subscriptions/#{id}") { [404, {}, 'Not Found'] }
         end
       end
       it 'should raise' do
@@ -74,7 +74,7 @@ describe Apruve::Subscription do
       let! (:stubs) do
         faraday_stubs do |stub|
           stub.put(
-              "/api/v3/subscriptions/#{id}",
+              "/api/v4/subscriptions/#{id}",
               subscription.to_json,
           ) { [200, {}, response.to_json] }
         end
@@ -89,7 +89,7 @@ describe Apruve::Subscription do
       let! (:stubs) do
         faraday_stubs do |stub|
           stub.put(
-              "/api/v3/subscriptions/#{id}",
+              "/api/v4/subscriptions/#{id}",
               subscription.to_json,
           ) { [404, {}, 'Not Found'] }
         end
@@ -115,7 +115,7 @@ describe Apruve::Subscription do
     describe 'success' do
       let! (:stubs) do
         faraday_stubs do |stub|
-          stub.post("/api/v3/subscriptions/#{id}/cancel") { [200, {}, response.to_json] }
+          stub.post("/api/v4/subscriptions/#{id}/cancel") { [200, {}, response.to_json] }
         end
       end
       it 'should do a post' do
@@ -129,7 +129,7 @@ describe Apruve::Subscription do
     describe 'subscription not found' do
       let! (:stubs) do
         faraday_stubs do |stub|
-          stub.post("/api/v3/subscriptions/#{id}/cancel") { [404, {}, 'Not Found'] }
+          stub.post("/api/v4/subscriptions/#{id}/cancel") { [404, {}, 'Not Found'] }
         end
       end
       it 'should raise' do

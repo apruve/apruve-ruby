@@ -14,7 +14,7 @@ module Apruve
       :scheme => 'http',
       :host => 'localhost',
       :port => 3000,
-      :version => 'v3',
+      :version => 'v4',
   }
 
   class << self
@@ -57,6 +57,10 @@ module Apruve
       self.client.put *args
     end
 
+    def patch(*args, &block)
+      self.client.patch *args
+    end
+
     def unstore(*args, &block)
       self.client.delete *args
     end
@@ -88,7 +92,7 @@ module Apruve
 
     def js_url
       port_param = [443, 80].include?(@config[:port]) ? '' : ":#{@config[:port]}"
-      "#{@config[:scheme]}://#{@config[:host]}#{port_param}/js/apruve.js"
+      "#{@config[:scheme]}://#{@config[:host]}#{port_param}/js/v4/apruve.js"
     end
   end
 
