@@ -7,6 +7,15 @@ module Apruve
       response = Apruve.get("invoices/#{id}")
       Invoice.new(response.body)
     end
+    
+    def self.index(order_id)
+      response = Apruve.get("orders/#{order_id}/invoices")
+      ret = []
+      response.body.each do |i|
+        ret << Invoice.new(i)
+      end
+      ret
+    end
 
     def initialize(params)
       super
