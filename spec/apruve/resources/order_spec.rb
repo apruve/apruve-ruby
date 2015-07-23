@@ -34,8 +34,8 @@ describe Apruve::Order do
         shipping_cents: 0,
         expire_at: '2014-07-22T00:00:00+00:00',
         order_items: order_items,
-        auto_finalize: false,
-        auto_invoice: false
+        finalize_on_create: false,
+        invoice_on_create: false
     )
   end
   subject { payment_request }
@@ -50,8 +50,8 @@ describe Apruve::Order do
   it { should respond_to(:created_at) }
   it { should respond_to(:updated_at) }
   it { should respond_to(:accepts_payment_terms) }
-  it { should respond_to(:auto_finalize) }
-  it { should respond_to(:auto_invoice) }
+  it { should respond_to(:finalize_on_create) }
+  it { should respond_to(:invoice_on_create) }
 
   describe '#to_json' do
     let(:expected) do
@@ -59,7 +59,7 @@ describe Apruve::Order do
       "\"shipping_cents\":0,\"expire_at\":\"2014-07-22T00:00:00+00:00\",\"order_items\":[{\"title\":\"line 1\",\"amount_cents\":\"1230\","\
       "\"price_ea_cents\":\"123\",\"quantity\":10,\"description\":\"A line item\",\"variant_info\":\"small\","\
       "\"sku\":\"LINE1SKU\",\"vendor\":\"acme, inc.\",\"view_product_url\":\"http://www.apruve.com/doc\"},"\
-      "{\"title\":\"line 2\",\"amount_cents\":\"40\"}],\"auto_finalize\":false,\"auto_invoice\":false}"
+      "{\"title\":\"line 2\",\"amount_cents\":\"40\"}],\"finalize_on_create\":false,\"invoice_on_create\":false}"
     end
     its(:to_json) { should eq expected }
   end

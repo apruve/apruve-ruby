@@ -2,7 +2,7 @@ module Apruve
   class Order < Apruve::ApruveObject
     attr_accessor :id, :merchant_id, :customer_id, :merchant_order_id, :status, :amount_cents, :currency, :tax_cents,
                   :shipping_cents, :expire_at, :order_items, :accepts_payments_via, :accepts_payment_terms, :payment_terms,
-                  :created_at, :updated_at, :final_state_at, :default_payment_method, :links, :auto_finalize, :auto_invoice
+                  :created_at, :updated_at, :final_state_at, :default_payment_method, :links, :finalize_on_create, :invoice_on_create
 
     def self.find(id)
       response = Apruve.get("orders/#{id}")
@@ -44,7 +44,7 @@ module Apruve
 
     def value_string
       # add each field in the PR
-      str = "#{merchant_id}#{merchant_order_id}#{amount_cents}#{currency}#{tax_cents}#{shipping_cents}#{expire_at}#{accepts_payment_terms}#{auto_finalize}#{auto_invoice}"
+      str = "#{merchant_id}#{merchant_order_id}#{amount_cents}#{currency}#{tax_cents}#{shipping_cents}#{expire_at}#{accepts_payment_terms}#{finalize_on_create}#{invoice_on_create}"
 
       # add the line items
       self.order_items.each do |item|
