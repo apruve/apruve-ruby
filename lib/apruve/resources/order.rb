@@ -15,6 +15,15 @@ module Apruve
       logger.debug response.body
       Order.new(response.body)
     end
+
+    def self.invoices_for(order_id)
+      response = Apruve.get("orders/#{order_id}/invoices")
+      ret = []
+      response.body.each do |i|
+        ret << Invoice.new(i)
+      end
+      ret
+    end
     
     def update!
       response = Apruve.patch("orders/#{id}", self.to_json)
