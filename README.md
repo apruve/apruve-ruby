@@ -86,7 +86,7 @@ Decide where to put the Apruve button
 
 Use the orderId to issue an Invoice
 
-    apruve_invoice = Apruve::Invoice.new(order_id: params[:order_id], amount_cents: params[:charge], auto_issue: true)
+    apruve_invoice = Apruve::Invoice.new(order_id: params[:order_id], amount_cents: params[:charge], issue_on_create: true)
     apruve_invoice.save!
 
 Save the status and the invoice ID with the payment in your database

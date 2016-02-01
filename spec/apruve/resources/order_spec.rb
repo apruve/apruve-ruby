@@ -33,7 +33,9 @@ describe Apruve::Order do
         tax_cents: 0,
         shipping_cents: 0,
         expire_at: '2014-07-22T00:00:00+00:00',
-        order_items: order_items
+        order_items: order_items,
+        finalize_on_create: false,
+        invoice_on_create: false
     )
   end
   subject { payment_request }
@@ -47,6 +49,9 @@ describe Apruve::Order do
   it { should respond_to(:links) }
   it { should respond_to(:created_at) }
   it { should respond_to(:updated_at) }
+  it { should respond_to(:accepts_payment_terms) }
+  it { should respond_to(:finalize_on_create) }
+  it { should respond_to(:invoice_on_create) }
 
   describe '#to_json' do
     let(:expected) do
@@ -54,14 +59,14 @@ describe Apruve::Order do
       "\"shipping_cents\":0,\"expire_at\":\"2014-07-22T00:00:00+00:00\",\"order_items\":[{\"title\":\"line 1\",\"amount_cents\":\"1230\","\
       "\"price_ea_cents\":\"123\",\"quantity\":10,\"description\":\"A line item\",\"variant_info\":\"small\","\
       "\"sku\":\"LINE1SKU\",\"vendor\":\"acme, inc.\",\"view_product_url\":\"http://www.apruve.com/doc\"},"\
-      "{\"title\":\"line 2\",\"amount_cents\":\"40\"}]}"
+      "{\"title\":\"line 2\",\"amount_cents\":\"40\"}],\"finalize_on_create\":false,\"invoice_on_create\":false}"
     end
     its(:to_json) { should eq expected }
   end
 
   describe '#value_string' do
     let(:expected) do
-      '9999ABC12340002014-07-22T00:00:00+00:00line 1123012310A line itemsmallLINE1SKUacme, inc.http://www.apruve.com/docline 240'
+      '9999ABC12340002014-07-22T00:00:00+00:00falsefalseline 1123012310A line itemsmallLINE1SKUacme, inc.http://www.apruve.com/docline 240'
     end
     its(:value_string) { should eq expected }
   end
@@ -77,7 +82,7 @@ describe Apruve::Order do
       end
     end
     describe 'with api_key' do
-      let (:hash) { '7a4df9a9a47e88c3c1957853341d5e9a1abc2028ede3a0a9e4f894a2925a187f' }
+      let (:hash) { '9aa1dda31ecd611ed759e132c2c4afec810409e49866db0090d8fa51fe4ad597' }
       let (:api_key) { 'an_api_key' }
       before :each do
         Apruve.configure(api_key)
