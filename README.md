@@ -37,7 +37,7 @@ For [test.apruve.com](test.apruve.com)
 For [www.apruve.com](www.apruve.com)
     Apruve.configure('YOUR_APRUVE_API_KEY', 'prod')
 
-### Create a PaymentRequest
+### Create an Order
 
     @order = Apruve::Order.new(
           merchant_id: your_merchant_id,
