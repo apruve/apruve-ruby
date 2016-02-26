@@ -24,9 +24,15 @@ module Apruve
       end
       ret
     end
+
+    def self.cancel!(id)
+      response = Apruve.post("orders/#{id}/cancel")
+      logger.debug response.body
+      Order.new(response.body)
+    end
     
     def update!
-      response = Apruve.patch("orders/#{id}", self.to_json)
+      response = Apruve.patch("orders/#{id}", {order: self}.to_json )
       logger.debug response.body
       initialize response.body
     end

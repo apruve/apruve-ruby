@@ -66,9 +66,8 @@ At the top of the file, import the apruve.js script.
 
 Write a little Javascript to configure apruve.js
 
-1. set the secure hash
-2. set the payment request
-3. register a callback to capture apruve.paymentRequestId
+1. use setOrder to set the order JSON and secureHash string
+1. register a callback to capture orderId
 
 ``` javascript
     apruve.setOrder(<%= @order.to_json %>, '<%= @order.secure_hash %>');

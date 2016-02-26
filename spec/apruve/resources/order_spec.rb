@@ -163,13 +163,40 @@ describe Apruve::Order do
     end
   end
 
+  describe '#cancel' do
+    let (:id) { '89ea2488fe0a5c7bb38aa7f9b088874a' }
+    describe 'success' do
+      let! (:stubs) do
+        faraday_stubs do |stub|
+          stub.post("/api/v4/orders/#{id}/cancel") { [200, {}, '{}'] }
+        end
+      end
+      it 'should do a get' do
+        Apruve::Order.cancel!(id)
+        stubs.verify_stubbed_calls
+      end
+    end
+
+    describe 'not found' do
+      let! (:stubs) do
+        faraday_stubs do |stub|
+          stub.post("/api/v4/orders/#{id}/cancel") { [404, {}, 'Not Found'] }
+        end
+      end
+      it 'should raise' do
+        expect { Apruve::Order.cancel!(id) }.to raise_error(Apruve::NotFound)
+        stubs.verify_stubbed_calls
+      end
+    end
+  end
+
   describe '#update' do
     let (:id) { '89ea2488fe0a5c7bb38aa7f9b088874a' }
     let (:order) { Apruve::Order.new id: id, merchant_id: 9999 }
     describe 'success' do
       let! (:stubs) do
         faraday_stubs do |stub|
-          stub.patch("/api/v4/orders/#{id}", order.to_json) { [200, {}, '{}'] }
+          stub.patch("/api/v4/orders/#{id}", {order: order}.to_json) { [200, {}, '{}'] }
         end
       end
       it 'should do a get' do
@@ -181,7 +208,7 @@ describe Apruve::Order do
     describe 'not found' do
       let! (:stubs) do
         faraday_stubs do |stub|
-          stub.patch("/api/v4/orders/#{id}", order.to_json) { [404, {}, 'Not Found'] }
+          stub.patch("/api/v4/orders/#{id}", {order: order}.to_json) { [404, {}, 'Not Found'] }
         end
       end
       it 'should raise' do
