@@ -8,12 +8,6 @@ module Apruve
       WebhookEndpoint.new(response.body)
     end
 
-    def self.destroy(merchant_id, id)
-      response = Apruve.delete("merchants/#{merchant_id}/webhook_endpoints/#{id}")
-      logger.debug response.body
-      response.status
-    end
-    
     def self.where(merchant_id)
       response = Apruve.get("merchants/#{merchant_id}/webhook_endpoints")
       logger.debug response.body
@@ -22,6 +16,12 @@ module Apruve
         ret << WebhookEndpoint.new(i)
       end
       ret
+    end
+
+    def destroy!
+      response = Apruve.delete("merchants/#{merchant_id}/webhook_endpoints/#{id}")
+      logger.debug response.body
+      response.status
     end
     
     def create!

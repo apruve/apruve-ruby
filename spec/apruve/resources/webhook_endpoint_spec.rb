@@ -76,7 +76,8 @@ describe Apruve::WebhookEndpoint do
     end
   end
   
-  describe '#destroy' do
+  describe '#destroy!' do
+    let(:webhook_endpoint) { Apruve::WebhookEndpoint.new merchant_id: merchant_id, id: id }
     describe 'success' do
       let! (:stubs) do
         faraday_stubs do |stub|
@@ -84,7 +85,7 @@ describe Apruve::WebhookEndpoint do
         end
       end
       it 'should do a delete' do
-        Apruve::WebhookEndpoint.destroy(merchant_id, id)
+        webhook_endpoint.destroy!
         stubs.verify_stubbed_calls
       end
     end
@@ -96,7 +97,7 @@ describe Apruve::WebhookEndpoint do
         end
       end
       it 'should raise' do
-        expect { Apruve::WebhookEndpoint.destroy(merchant_id, id) }.to raise_error(Apruve::NotFound)
+        expect { webhook_endpoint.destroy! }.to raise_error(Apruve::NotFound)
         stubs.verify_stubbed_calls
       end
     end
