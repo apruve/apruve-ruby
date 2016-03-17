@@ -5,7 +5,7 @@ module Apruve
     def self.find(merchant_id, id)
       response = Apruve.get("merchants/#{merchant_id}/webhook_endpoints/#{id}")
       logger.debug response.body
-      WebhookEndpoint.new(response.body)
+      WebhookEndpoint.new(response.body.merge(merchant_id: merchant_id))
     end
 
     def self.where(merchant_id)
@@ -13,7 +13,7 @@ module Apruve
       logger.debug response.body
       ret = []
       response.body.each do |i|
-        ret << WebhookEndpoint.new(i)
+        ret << WebhookEndpoint.new(i.merge(merchant_id: merchant_id))
       end
       ret
     end

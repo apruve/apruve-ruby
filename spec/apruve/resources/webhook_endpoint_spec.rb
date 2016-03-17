@@ -17,6 +17,7 @@ describe Apruve::WebhookEndpoint do
         merchant_id: merchant_id,
     )
   end
+  let (:json) { {id: id, version: version, url: url} }
   subject { webhook_endpoint }
 
   it { should respond_to(:id) }
@@ -28,12 +29,15 @@ describe Apruve::WebhookEndpoint do
     describe 'success' do
       let! (:stubs) do
         faraday_stubs do |stub|
-          stub.get("/api/v4/merchants/#{merchant_id}/webhook_endpoints") { [200, {}, '{}'] }
+          stub.get("/api/v4/merchants/#{merchant_id}/webhook_endpoints") { [200, {}, [json,json].to_json] }
         end
       end
       it 'should do a get' do
-        Apruve::WebhookEndpoint.where(merchant_id)
+        endpoints = Apruve::WebhookEndpoint.where(merchant_id)
         stubs.verify_stubbed_calls
+        endpoints.each do |endpoint|
+          expect(endpoint.merchant_id).to eq merchant_id
+        end
       end
     end
 
@@ -54,12 +58,13 @@ describe Apruve::WebhookEndpoint do
     describe 'success' do
       let! (:stubs) do
         faraday_stubs do |stub|
-          stub.get("/api/v4/merchants/#{merchant_id}/webhook_endpoints/#{id}") { [200, {}, '{}'] }
+          stub.get("/api/v4/merchants/#{merchant_id}/webhook_endpoints/#{id}") { [200, {}, json.to_json] }
         end
       end
       it 'should do a get' do
-        Apruve::WebhookEndpoint.find(merchant_id, id)
+        endpoint = Apruve::WebhookEndpoint.find(merchant_id, id)
         stubs.verify_stubbed_calls
+        expect(endpoint.merchant_id).to eq merchant_id
       end
     end
 
