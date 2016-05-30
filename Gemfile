@@ -23,4 +23,5 @@ group :test do
   gem 'rake'
   gem 'vcr'
   gem 'webmock'
+  gem 'simplecov'
 end
