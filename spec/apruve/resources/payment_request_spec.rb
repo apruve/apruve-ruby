@@ -89,6 +89,25 @@ describe Apruve::PaymentRequest do
     end
   end
 
+  describe '#finailize!' do
+    let (:id) { '89ea2488fe0a5c7bb38aa7f9b088874a' }
+    describe 'success' do
+      # stub out a successful post
+      let! (:stubs) do
+        faraday_stubs do |stub|
+          stub.post("payment_requests/#{id}/finalize") { [201, {}, '{}'] }
+        end
+      end
+
+      it 'should do a post' do
+        Apruve::PaymentRequest.finalize!(id)
+        stubs.verify_stubbed_calls
+      end
+    end
+    # stub out a failed post
+
+  end
+
   describe '#validate' do
     describe 'no errors' do
       it 'should not raise' do
