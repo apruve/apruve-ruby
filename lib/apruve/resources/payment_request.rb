@@ -21,11 +21,10 @@ module Apruve
       if @line_items.nil?
         @line_items = []
       elsif @line_items.is_a?(Array) && @line_items.first.is_a?(Hash)
-        hydrated_items = []
-        @line_items.each do |item|
-          hydrated_items << Apruve::LineItem.new(item)
+        @line_items.map! do |item|
+          Apruve::LineItem.new(item)
         end
-        @line_items = hydrated_items
+        @line_items
       end
     end
 
