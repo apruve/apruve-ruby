@@ -1,3 +1,6 @@
+require 'simplecov'
+SimpleCov.start
+
 require 'apruve'
 # require File.join(File.dirname(__FILE__), '../lib', 'apruve.rb')
 

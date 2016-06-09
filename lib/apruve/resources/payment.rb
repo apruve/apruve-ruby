@@ -14,11 +14,9 @@ module Apruve
       if @payment_items.nil?
         @payment_items = []
       elsif @payment_items.is_a?(Array) && @payment_items.first.is_a?(Hash)
-        hydrated_items = []
-        @payment_items.each do |item|
-          hydrated_items << Apruve::LineItem.new(item)
+        @payment_items.map! do |item|
+          Apruve::LineItem.new(item)
         end
-        @payment_items = hydrated_items
       end
       @currency = Apruve.default_currency if currency.nil?
     end
