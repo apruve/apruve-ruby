@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe Apruve::LineItem do
+describe Apruve::OrderItem do
   let (:line_item) do
-    Apruve::LineItem.new(
+    Apruve::OrderItem.new(
         title: 'line 2',
         amount_cents: '40'
     )
