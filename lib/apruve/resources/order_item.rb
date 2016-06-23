@@ -1,5 +1,5 @@
 module Apruve
-  class LineItem < Apruve::ApruveObject
+  class OrderItem < Apruve::ApruveObject
     attr_accessor :id, :title, :amount_cents, :price_ea_cents, :quantity, :description, :merchant_notes,
                   :variant_info, :sku, :vendor, :view_product_url, :plan_code, :line_item_api_url,
                   :subscription_url
