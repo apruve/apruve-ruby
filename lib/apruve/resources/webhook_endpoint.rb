@@ -1,9 +1,9 @@
 module Apruve
   class WebhookEndpoint < Apruve::ApruveObject
-    attr_accessor :id, :version, :url, :merchant_id
+    attr_accessor :uuid, :version, :url, :merchant_id
 
-    def self.find(merchant_id, id)
-      response = Apruve.get("merchants/#{merchant_id}/webhook_endpoints/#{id}")
+    def self.find(merchant_id, uuid)
+      response = Apruve.get("merchants/#{merchant_id}/webhook_endpoints/#{uuid}")
       logger.debug response.body
       WebhookEndpoint.new(response.body.merge(merchant_id: merchant_id))
     end
@@ -19,7 +19,7 @@ module Apruve
     end
 
     def destroy!
-      response = Apruve.delete("merchants/#{merchant_id}/webhook_endpoints/#{id}")
+      response = Apruve.delete("merchants/#{merchant_id}/webhook_endpoints/#{uuid}")
       logger.debug response.body
       response.status
     end

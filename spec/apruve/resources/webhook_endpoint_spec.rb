@@ -5,22 +5,22 @@ describe Apruve::WebhookEndpoint do
     Apruve.configure('f5fbe71d68772d1f562ed6f598b995b3', 'local')
   end
 
-  let (:id) { 1234 }
+  let (:uuid) { SecureRandom.hex }
   let (:version) { 'A title' }
   let (:url) { Faker::Internet.url }
   let (:merchant_id) { 'f5fbe71d68772d1f562ed6f598b995b3' }
   let (:webhook_endpoint) do
     Apruve::WebhookEndpoint.new(
-        id: id,
+        uuid: uuid,
         version: version,
         url: url,
         merchant_id: merchant_id,
     )
   end
-  let (:json) { {id: id, version: version, url: url} }
+  let (:json) { {uuid: uuid, version: version, url: url} }
   subject { webhook_endpoint }
 
-  it { should respond_to(:id) }
+  it { should respond_to(:uuid) }
   it { should respond_to(:version) }
   it { should respond_to(:url) }
   it { should respond_to(:merchant_id) }
@@ -58,11 +58,11 @@ describe Apruve::WebhookEndpoint do
     describe 'success' do
       let! (:stubs) do
         faraday_stubs do |stub|
-          stub.get("/api/v4/merchants/#{merchant_id}/webhook_endpoints/#{id}") { [200, {}, json.to_json] }
+          stub.get("/api/v4/merchants/#{merchant_id}/webhook_endpoints/#{uuid}") { [200, {}, json.to_json] }
         end
       end
       it 'should do a get' do
-        endpoint = Apruve::WebhookEndpoint.find(merchant_id, id)
+        endpoint = Apruve::WebhookEndpoint.find(merchant_id, uuid)
         stubs.verify_stubbed_calls
         expect(endpoint.merchant_id).to eq merchant_id
       end
@@ -71,22 +71,22 @@ describe Apruve::WebhookEndpoint do
     describe 'not found' do
       let! (:stubs) do
         faraday_stubs do |stub|
-          stub.get("/api/v4/merchants/#{merchant_id}/webhook_endpoints/#{id}") { [404, {}, 'Not Found'] }
+          stub.get("/api/v4/merchants/#{merchant_id}/webhook_endpoints/#{uuid}") { [404, {}, 'Not Found'] }
         end
       end
       it 'should raise' do
-        expect { Apruve::WebhookEndpoint.find(merchant_id, id) }.to raise_error(Apruve::NotFound)
+        expect { Apruve::WebhookEndpoint.find(merchant_id, uuid) }.to raise_error(Apruve::NotFound)
         stubs.verify_stubbed_calls
       end
     end
   end
   
   describe '#destroy!' do
-    let(:webhook_endpoint) { Apruve::WebhookEndpoint.new merchant_id: merchant_id, id: id }
+    let(:webhook_endpoint) { Apruve::WebhookEndpoint.new merchant_id: merchant_id, uuid: uuid }
     describe 'success' do
       let! (:stubs) do
         faraday_stubs do |stub|
-          stub.delete("/api/v4/merchants/#{merchant_id}/webhook_endpoints/#{id}") { [200, {}, '{}'] }
+          stub.delete("/api/v4/merchants/#{merchant_id}/webhook_endpoints/#{uuid}") { [200, {}, '{}'] }
         end
       end
       it 'should do a delete' do
@@ -98,7 +98,7 @@ describe Apruve::WebhookEndpoint do
     describe 'not found' do
       let! (:stubs) do
         faraday_stubs do |stub|
-          stub.delete("/api/v4/merchants/#{merchant_id}/webhook_endpoints/#{id}") { [404, {}, 'Not Found'] }
+          stub.delete("/api/v4/merchants/#{merchant_id}/webhook_endpoints/#{uuid}") { [404, {}, 'Not Found'] }
         end
       end
       it 'should raise' do
