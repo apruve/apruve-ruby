@@ -75,7 +75,7 @@ module Apruve
     def configure_environment(env)
       if env == PROD
         @config[:scheme] = 'https'
-        @config[:host] = 'www.apruve.com'
+        @config[:host] = 'app.apruve.com'
         @config[:port] = 443
       elsif env == TEST
         @config[:scheme] = 'https'
