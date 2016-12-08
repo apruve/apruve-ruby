@@ -22,7 +22,7 @@ describe 'Apruve' do
       end
     end
     describe 'local' do
-      let (:script_tag) { '<script type="text/javascript" src="https://www.apruve.com/js/v4/apruve.js"></script>' }
+      let (:script_tag) { '<script type="text/javascript" src="https://app.apruve.com/js/v4/apruve.js"></script>' }
       it 'should print the tag' do
         Apruve.configure(nil, 'prod')
         expect(Apruve.js).to eq script_tag
