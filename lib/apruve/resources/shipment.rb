@@ -25,7 +25,6 @@ module Apruve
     def validate
       errors = []
       errors << 'invoice_id must be set' if invoice_id.nil?
-      errors << 'amount_cents must be set' if amount_cents.nil?
       raise Apruve::ValidationError.new(errors) if errors.length > 0
     end
 

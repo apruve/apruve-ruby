@@ -53,10 +53,10 @@ describe Apruve::Shipment do
     end
     describe 'errors' do
       before :each do
-        shipment.amount_cents = nil
+        shipment.invoice_id = nil
       end
-      it 'should raise on no merchant_id' do
-        expect { shipment.validate }.to raise_error(Apruve::ValidationError, '["amount_cents must be set"]')
+      it 'should raise on no invoice_id' do
+        expect { shipment.validate }.to raise_error(Apruve::ValidationError, '["invoice_id must be set"]')
       end
     end
   end
