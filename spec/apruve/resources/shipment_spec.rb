@@ -13,6 +13,11 @@ describe Apruve::Shipment do
   let (:shipped_at) { '2016-11-11T00:00:00-06:00' }
   let (:delivered_at) { '2016-11-11T00:00:00-06:00' }
   let (:tracking_number) { '1234abcd' }
+  let (:currency) { 'USD' }
+  let (:tax_cents) { 1234 }
+  let (:shipping_cents) { 12345 }
+  let (:status) { 'fulfilled' }
+  let (:merchant_shipment_id) { 'ZZ1234567' }
   let (:shipment) do
     Apruve::Shipment.new(
         amount_cents: amount_cents,
@@ -23,6 +28,11 @@ describe Apruve::Shipment do
         shipped_at: shipped_at,
         delivered_at: delivered_at,
         tracking_number: tracking_number,
+        currency: currency,
+        tax_cents: tax_cents,
+        shipping_cents: shipping_cents,
+        status: status,
+        merchant_shipment_id: merchant_shipment_id
     )
   end
   subject { shipment }
@@ -37,10 +47,14 @@ describe Apruve::Shipment do
   it { should respond_to(:delivered_at) }
   it { should respond_to(:merchant_notes) }
   it { should respond_to(:invoice_items) }
+  it { should respond_to(:tax_cents) }
+  it { should respond_to(:shipping_cents) }
+  it { should respond_to(:status) }
+  it { should respond_to(:merchant_shipment_id) }
 
   describe '#to_json' do
     let(:expected) do
-      '{"amount_cents":1234578,"merchant_notes":"foo","id":"91ac96c0ffc9577ecb634ad726b1874e","invoice_id":"2d1bd4f93a1b9ed034e36783adb29bed","shipper":"shipper name","shipped_at":"2016-11-11T00:00:00-06:00","delivered_at":"2016-11-11T00:00:00-06:00","tracking_number":"1234abcd","invoice_items":[],"currency":"USD"}'
+      '{"amount_cents":1234578,"merchant_notes":"foo","id":"91ac96c0ffc9577ecb634ad726b1874e","invoice_id":"2d1bd4f93a1b9ed034e36783adb29bed","shipper":"shipper name","shipped_at":"2016-11-11T00:00:00-06:00","delivered_at":"2016-11-11T00:00:00-06:00","tracking_number":"1234abcd","currency":"USD","tax_cents":1234,"shipping_cents":12345,"status":"fulfilled","merchant_shipment_id":"ZZ1234567","invoice_items":[]}'
     end
     its(:to_json) { should eq expected }
   end
