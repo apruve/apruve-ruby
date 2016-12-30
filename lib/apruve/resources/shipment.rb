@@ -1,6 +1,8 @@
 module Apruve
   class Shipment < Apruve::ApruveObject
-    attr_accessor :id, :invoice_id, :amount_cents, :currency, :shipper, :shipped_at, :tracking_number, :delivered_at, :merchant_notes, :invoice_items
+    attr_accessor :id, :invoice_id, :amount_cents, :currency, :shipper, :shipped_at,
+                  :tracking_number, :delivered_at, :merchant_notes, :invoice_items,
+                  :tax_cents, :shipping_cents, :status, :merchant_shipment_id
 
     def self.find(invoice_id, id)
       response = Apruve.get("invoices/#{invoice_id}/shipments/#{id}")
@@ -36,7 +38,7 @@ module Apruve
 
     def update!
       validate
-      response = Apruve.patch("invoices/#{self.invoice_id}/shipments/#{id}", self.to_json)
+      Apruve.patch("invoices/#{self.invoice_id}/shipments/#{id}", self.to_json)
     end
   end
 end
