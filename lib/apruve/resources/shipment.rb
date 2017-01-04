@@ -1,7 +1,7 @@
 module Apruve
   class Shipment < Apruve::ApruveObject
     attr_accessor :id, :invoice_id, :amount_cents, :currency, :shipper, :shipped_at,
-                  :tracking_number, :delivered_at, :merchant_notes, :invoice_items,
+                  :tracking_number, :delivered_at, :merchant_notes, :shipment_items,
                   :tax_cents, :shipping_cents, :status, :merchant_shipment_id
 
     def self.find(invoice_id, id)
@@ -12,14 +12,14 @@ module Apruve
     def initialize(params)
       super
       # hydrate payment items if appropriate
-      if @invoice_items.nil?
-        @invoice_items = []
-      elsif @invoice_items.is_a?(Array) && @invoice_items.first.is_a?(Hash)
+      if @shipment_items.nil?
+        @shipment_items = []
+      elsif @shipment_items.is_a?(Array) && @shipment_items.first.is_a?(Hash)
         hydrated_items = []
-        @invoice_items.each do |item|
-          hydrated_items << Apruve::OrderItem.new(item)
+        @shipment_items.each do |item|
+          hydrated_items << Apruve::ShipmentItem.new(item)
         end
-        @invoice_items = hydrated_items
+        @shipment_items = hydrated_items
       end
       @currency = Apruve.default_currency if currency.nil?
     end

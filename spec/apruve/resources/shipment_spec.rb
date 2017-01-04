@@ -46,7 +46,7 @@ describe Apruve::Shipment do
   it { should respond_to(:shipped_at) }
   it { should respond_to(:delivered_at) }
   it { should respond_to(:merchant_notes) }
-  it { should respond_to(:invoice_items) }
+  it { should respond_to(:shipment_items) }
   it { should respond_to(:tax_cents) }
   it { should respond_to(:shipping_cents) }
   it { should respond_to(:status) }
@@ -54,7 +54,7 @@ describe Apruve::Shipment do
 
   describe '#to_json' do
     let(:expected) do
-      '{"amount_cents":1234578,"merchant_notes":"foo","id":"91ac96c0ffc9577ecb634ad726b1874e","invoice_id":"2d1bd4f93a1b9ed034e36783adb29bed","shipper":"shipper name","shipped_at":"2016-11-11T00:00:00-06:00","delivered_at":"2016-11-11T00:00:00-06:00","tracking_number":"1234abcd","currency":"USD","tax_cents":1234,"shipping_cents":12345,"status":"fulfilled","merchant_shipment_id":"ZZ1234567","invoice_items":[]}'
+      '{"amount_cents":1234578,"merchant_notes":"foo","id":"91ac96c0ffc9577ecb634ad726b1874e","invoice_id":"2d1bd4f93a1b9ed034e36783adb29bed","shipper":"shipper name","shipped_at":"2016-11-11T00:00:00-06:00","delivered_at":"2016-11-11T00:00:00-06:00","tracking_number":"1234abcd","currency":"USD","tax_cents":1234,"shipping_cents":12345,"status":"fulfilled","merchant_shipment_id":"ZZ1234567","shipment_items":[]}'
     end
     its(:to_json) { should eq expected }
   end
