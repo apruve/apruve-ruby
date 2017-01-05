@@ -47,22 +47,32 @@ module Apruve
 
     def get(*args, &block)
       self.client.get *args
+    rescue URI::InvalidURIError
+      handle_invalid_url(args[0])
     end
 
     def post(*args, &block)
       self.client.post *args
+    rescue URI::InvalidURIError
+      handle_invalid_url(args[0])
     end
 
     def put(*args, &block)
       self.client.put *args
+    rescue URI::InvalidURIError
+      handle_invalid_url(args[0])
     end
 
     def patch(*args, &block)
       self.client.patch *args
+    rescue URI::InvalidURIError
+      handle_invalid_url(args[0])
     end
 
     def unstore(*args, &block)
       self.client.delete *args
+    rescue URI::InvalidURIError
+      handle_invalid_url(args[0])
     end
 
     alias_method :delete, :unstore
@@ -71,6 +81,11 @@ module Apruve
     # that will run without an api-key
 
     private
+
+    def handle_invalid_url(url)
+      client.config[:logger].warn 'Invalid URL'
+      raise Faraday::Error::ResourceNotFound.new(body: '', status: 404, headers: {}, url: url)
+    end
 
     def configure_environment(env)
       if env == PROD

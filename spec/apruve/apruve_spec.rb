@@ -61,7 +61,7 @@ describe 'Apruve' do
     end
   end
 
-  describe '#get' do
+  describe 'URL actions' do
     let (:api_key) { 'an-api-key' }
     let (:url) { 'example.com' }
     before :each do
@@ -71,7 +71,46 @@ describe 'Apruve' do
       it 'should raise' do
         expect { Apruve.get('gibberish') }.to raise_error(Apruve::ServiceUnreachable)
       end
+    end
 
+    describe '#get' do
+      describe 'invalid URL' do
+        it 'should raise a Faraday error' do
+          expect { Apruve.get('#asldkjfsldfj#Asdlofjasod##') }.to raise_error(Faraday::Error::ResourceNotFound)
+        end
+      end
+    end
+
+    describe '#post' do
+      describe 'invalid URL' do
+        it 'should raise a Faraday error' do
+          expect { Apruve.get('#asldkjfsldfj#Asdlofjasod##') }.to raise_error(Faraday::Error::ResourceNotFound)
+        end
+      end
+    end
+
+    describe '#patch' do
+      describe 'invalid URL' do
+        it 'should raise a Faraday error' do
+          expect { Apruve.get('#asldkjfsldfj#Asdlofjasod##') }.to raise_error(Faraday::Error::ResourceNotFound)
+        end
+      end
+    end
+
+    describe '#unstore' do
+      describe 'invalid URL' do
+        it 'should raise a Faraday error' do
+          expect { Apruve.get('#asldkjfsldfj#Asdlofjasod##') }.to raise_error(Faraday::Error::ResourceNotFound)
+        end
+      end
+    end
+
+    describe '#put' do
+      describe 'invalid URL' do
+        it 'should raise a Faraday error' do
+          expect { Apruve.get('#asldkjfsldfj#Asdlofjasod##') }.to raise_error(Faraday::Error::ResourceNotFound)
+        end
+      end
     end
   end
 
