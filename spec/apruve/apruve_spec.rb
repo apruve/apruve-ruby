@@ -76,7 +76,7 @@ describe 'Apruve' do
     describe '#get' do
       describe 'invalid URL' do
         it 'should raise a Faraday error' do
-          expect { Apruve.get('#asldkjfsldfj#Asdlofjasod##') }.to raise_error(Faraday::Error::ResourceNotFound)
+          expect { Apruve.get('#asldkjfsldfj#Asdlofjasod##') }.to raise_error(Apruve::NotFound)
         end
       end
     end
@@ -84,7 +84,7 @@ describe 'Apruve' do
     describe '#post' do
       describe 'invalid URL' do
         it 'should raise a Faraday error' do
-          expect { Apruve.get('#asldkjfsldfj#Asdlofjasod##') }.to raise_error(Faraday::Error::ResourceNotFound)
+          expect { Apruve.get('#asldkjfsldfj#Asdlofjasod##') }.to raise_error(Apruve::NotFound)
         end
       end
     end
@@ -92,7 +92,7 @@ describe 'Apruve' do
     describe '#patch' do
       describe 'invalid URL' do
         it 'should raise a Faraday error' do
-          expect { Apruve.get('#asldkjfsldfj#Asdlofjasod##') }.to raise_error(Faraday::Error::ResourceNotFound)
+          expect { Apruve.get('#asldkjfsldfj#Asdlofjasod##') }.to raise_error(Apruve::NotFound)
         end
       end
     end
@@ -100,7 +100,7 @@ describe 'Apruve' do
     describe '#unstore' do
       describe 'invalid URL' do
         it 'should raise a Faraday error' do
-          expect { Apruve.get('#asldkjfsldfj#Asdlofjasod##') }.to raise_error(Faraday::Error::ResourceNotFound)
+          expect { Apruve.get('#asldkjfsldfj#Asdlofjasod##') }.to raise_error(Apruve::NotFound)
         end
       end
     end
@@ -108,7 +108,7 @@ describe 'Apruve' do
     describe '#put' do
       describe 'invalid URL' do
         it 'should raise a Faraday error' do
-          expect { Apruve.get('#asldkjfsldfj#Asdlofjasod##') }.to raise_error(Faraday::Error::ResourceNotFound)
+          expect { Apruve.get('#asldkjfsldfj#Asdlofjasod##') }.to raise_error(Apruve::NotFound)
         end
       end
     end

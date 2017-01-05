@@ -84,7 +84,7 @@ module Apruve
 
     def handle_invalid_url(url)
       client.config[:logger].warn 'Invalid URL'
-      raise Faraday::Error::ResourceNotFound.new(body: '', status: 404, headers: {}, url: url)
+      raise Apruve::NotFound.new(body: {}, status: 404, headers: {}, url: url)
     end
 
     def configure_environment(env)
