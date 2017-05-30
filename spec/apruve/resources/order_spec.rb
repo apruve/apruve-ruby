@@ -136,6 +136,37 @@ describe Apruve::Order do
     end
   end
 
+  describe '#save' do
+    let (:id) { '89ea2488fe0a5c7bb38aa7f9b088874a' }
+    let (:status) { 'pending' }
+    let (:api_url) { Faker::Internet.url }
+    let (:view_url) { Faker::Internet.url }
+    let (:response) do
+      {
+          id: id,
+          status: status,
+          api_url: api_url,
+          view_url: view_url
+      }
+    end
+    describe 'success' do
+      let! (:stubs) do
+        faraday_stubs do |stub|
+          stub.post(
+              "/api/v4/orders",
+              payment_request.to_json,
+          ) { [201, {}, response.to_json] }
+        end
+      end
+      it 'should do a post' do
+        payment_request.save!
+        expect(payment_request.id).to eq id
+        expect(payment_request.status).to eq status
+        stubs.verify_stubbed_calls
+      end
+    end
+  end
+
   describe '#finalize' do
     let (:id) { '89ea2488fe0a5c7bb38aa7f9b088874a' }
     describe 'success' do

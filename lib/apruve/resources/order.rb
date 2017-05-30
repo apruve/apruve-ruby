@@ -57,6 +57,14 @@ module Apruve
       raise Apruve::ValidationError.new(errors) if errors.length > 0
     end
 
+    def save!
+      validate
+      response = Apruve.post('orders', self.to_json)
+      self.id = response.body['id']
+      self.status = response.body['status']
+      self.created_at = response.body['created_at']
+    end
+
     def value_string
       # add each field in the PR
       str = "#{merchant_id}#{merchant_order_id}#{amount_cents}#{currency}#{tax_cents}#{shipping_cents}#{expire_at}#{accepts_payment_terms}#{finalize_on_create}#{invoice_on_create}"
