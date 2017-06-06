@@ -34,25 +34,25 @@ describe Apruve::InvoiceReturn do
   it { should respond_to(:updated_at) }
 
   describe '#find' do
-    describe 'success' do
+    context 'successful response' do
       let! (:stubs) do
         faraday_stubs do |stub|
           stub.get("api/v4/invoices/#{invoice_id}/invoice_returns/#{id}") { [200, {} , '{}'] }
         end
       end
-      it 'should do a get' do
+      it 'should get an invoice return' do
         Apruve::InvoiceReturn.find(invoice_id, id)
         stubs.verify_stubbed_calls
       end
     end
 
-    describe 'not found' do
+    context 'when not found' do
       let! (:stubs) do
         faraday_stubs do |stub|
           stub.get("api/v4/invoices/#{invoice_id}/invoice_returns/#{id}") { [404, {} , 'Not Found'] }
         end
       end
-      it 'should raise' do
+      it 'should raise not found' do
         expect { Apruve::InvoiceReturn.find(invoice_id, id) }.to raise_error(Apruve::NotFound)
         stubs.verify_stubbed_calls
       end
@@ -60,25 +60,25 @@ describe Apruve::InvoiceReturn do
   end
 
   describe '#find_all' do
-    describe 'success' do
+    context 'successful response' do
       let! (:stubs) do
         faraday_stubs do |stub|
           stub.get("api/v4/invoices/#{invoice_id}/invoice_returns") { [200, {} , '{}'] }
         end
       end
-      it 'should do a get' do
+      it 'should get all returns for an invoice' do
         Apruve::InvoiceReturn.find_all(invoice_id)
         stubs.verify_stubbed_calls
       end
     end
 
-    describe 'not found' do
+    context 'when invoice not found' do
       let! (:stubs) do
         faraday_stubs do |stub|
           stub.get("api/v4/invoices/#{invoice_id}/invoice_returns") { [404, {} , 'Not Found'] }
         end
       end
-      it 'should raise' do
+      it 'should raise not found' do
         expect { Apruve::InvoiceReturn.find_all(invoice_id) }.to raise_error(Apruve::NotFound)
         stubs.verify_stubbed_calls
       end
@@ -95,7 +95,7 @@ describe Apruve::InvoiceReturn do
         reason: reason
       }
     end
-    describe 'success' do
+    context 'successful response' do
       let! (:stubs) do
         faraday_stubs do |stub|
           stub.post(
@@ -104,14 +104,14 @@ describe Apruve::InvoiceReturn do
           ) { [200, {}, response.to_json] }
         end
       end
-      it 'should do a post' do
+      it 'should post new invoice return' do
         invoice_return.save!
         expect(invoice_return.id).to eq id
         stubs.verify_stubbed_calls
       end
     end
 
-    describe 'invoice not found' do
+    context 'when invoice not found' do
       let! (:stubs) do
         faraday_stubs do |stub|
           stub.post(
@@ -120,7 +120,7 @@ describe Apruve::InvoiceReturn do
           ) { [404, {}, 'Not Found'] }
         end
       end
-      it 'should raise' do
+      it 'should raise not found' do
         expect { invoice_return.save! }.to raise_error(Apruve::NotFound)
         stubs.verify_stubbed_calls
       end
@@ -138,25 +138,25 @@ describe Apruve::InvoiceReturn do
       }
     end
 
-    describe 'success' do
+    context 'successful response' do
       let! (:stubs) do
         faraday_stubs do |stub|
           stub.put("/api/v4/invoices/#{invoice_id}/invoice_returns/#{id}", invoice_return.to_json) { [200, {}, response.to_json] }
         end
       end
-      it 'should do a patch' do
+      it 'should put updated invoice return' do
         invoice_return.update!
         stubs.verify_stubbed_calls
       end
     end
 
-    describe 'invoice return not found' do
+    context 'when invoice return not found' do
       let! (:stubs) do
         faraday_stubs do |stub|
           stub.put("/api/v4/invoices/#{invoice_id}/invoice_returns/#{id}", invoice_return.to_json) { [404, {}, 'Not Found'] }
         end
       end
-      it 'should raise' do
+      it 'should raise not found' do
         expect { invoice_return.update! }.to raise_error(Apruve::NotFound)
         stubs.verify_stubbed_calls
       end
