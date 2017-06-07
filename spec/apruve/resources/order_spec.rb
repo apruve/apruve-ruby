@@ -2,14 +2,13 @@ require 'spec_helper'
 
 describe Apruve::Order do
   before :each do
-    Apruve.configure('f5fbe71d68772d1f562ed6f598b995b3', 'local')
+    Apruve.configure('7ec4e1ae7c96fceba0d599da541912b7', 'local')
   end
 
   let (:order_items) do
     [
         Apruve::OrderItem.new(
             title: 'line 1',
-            amount_cents: '1230',
             price_ea_cents: '123',
             quantity: 10,
             description: 'A line item',
@@ -20,22 +19,29 @@ describe Apruve::Order do
         ),
         Apruve::OrderItem.new(
             title: 'line 2',
-            amount_cents: '40'
+            price_ea_cents: '40'
         )
     ]
   end
 
+  let (:payment_term) do
+    {
+        corporate_account_id: '612e5383e4acc6c2213f3cae6208e868'
+    }
+  end
+
   let (:payment_request) do
     Apruve::Order.new(
-        merchant_id: '9999',
+        merchant_id: '9a9c3389fdc281b5c6c8d542a7e91ff6',
+        shopper_id: '9bc388fd08ce2835cfeb2e630316f7f1',
         merchant_order_id: 'ABC',
         amount_cents: 12340,
         tax_cents: 0,
         shipping_cents: 0,
-        expire_at: '2014-07-22T00:00:00+00:00',
         order_items: order_items,
         finalize_on_create: false,
-        invoice_on_create: false
+        invoice_on_create: false,
+        payment_term: payment_term
     )
   end
   subject { payment_request }
@@ -55,18 +61,17 @@ describe Apruve::Order do
 
   describe '#to_json' do
     let(:expected) do
-      "{\"merchant_id\":\"9999\",\"merchant_order_id\":\"ABC\",\"amount_cents\":12340,\"tax_cents\":0,"\
-      "\"shipping_cents\":0,\"expire_at\":\"2014-07-22T00:00:00+00:00\",\"order_items\":[{\"title\":\"line 1\",\"amount_cents\":\"1230\","\
-      "\"price_ea_cents\":\"123\",\"quantity\":10,\"description\":\"A line item\",\"variant_info\":\"small\","\
-      "\"sku\":\"LINE1SKU\",\"vendor\":\"acme, inc.\",\"view_product_url\":\"http://www.apruve.com/doc\"},"\
-      "{\"title\":\"line 2\",\"amount_cents\":\"40\"}],\"finalize_on_create\":false,\"invoice_on_create\":false}"
+      "{\"merchant_id\":\"9a9c3389fdc281b5c6c8d542a7e91ff6\",\"shopper_id\":\"9bc388fd08ce2835cfeb2e630316f7f1\",\"merchant_order_id\":\"ABC\","\
+      "\"amount_cents\":12340,\"tax_cents\":0,\"shipping_cents\":0,\"order_items\":[{\"title\":\"line 1\",\"price_ea_cents\":\"123\",\"quantity\":10,"\
+      "\"description\":\"A line item\",\"variant_info\":\"small\",\"sku\":\"LINE1SKU\",\"vendor\":\"acme, inc.\",\"view_product_url\":\"http://www.apruve.com/doc\""\
+      "},{\"title\":\"line 2\",\"price_ea_cents\":\"40\"}],\"finalize_on_create\":false,\"invoice_on_create\":false,\"payment_term\":{\"corporate_account_id\":\"612e5383e4acc6c2213f3cae6208e868\"}}"
     end
     its(:to_json) { should eq expected }
   end
 
   describe '#value_string' do
     let(:expected) do
-      '9999ABC12340002014-07-22T00:00:00+00:00falsefalseline 1123012310A line itemsmallLINE1SKUacme, inc.http://www.apruve.com/docline 240'
+      '9a9c3389fdc281b5c6c8d542a7e91ff6ABC1234000falsefalseline 112310A line itemsmallLINE1SKUacme, inc.http://www.apruve.com/docline 240'
     end
     its(:value_string) { should eq expected }
   end
@@ -82,7 +87,7 @@ describe Apruve::Order do
       end
     end
     describe 'with api_key' do
-      let (:hash) { '9aa1dda31ecd611ed759e132c2c4afec810409e49866db0090d8fa51fe4ad597' }
+      let (:hash) { 'a69b444d356b8afc68fc9c84e1686f645a539cc1975d07ef0d7a51e38a12b66c' }
       let (:api_key) { 'an_api_key' }
       before :each do
         Apruve.configure(api_key)
@@ -131,6 +136,38 @@ describe Apruve::Order do
       end
       it 'should raise' do
         expect { Apruve::Order.find(id) }.to raise_error(Apruve::NotFound)
+        stubs.verify_stubbed_calls
+      end
+    end
+  end
+
+  describe '#save' do
+    let (:id) { '89ea2488fe0a5c7bb38aa7f9b088874a' }
+    let (:status) { 'pending' }
+    let (:api_url) { Faker::Internet.url }
+    let (:view_url) { Faker::Internet.url }
+    let (:response) do
+      {
+          id: id,
+          status: status,
+          api_url: api_url,
+          view_url: view_url
+      }
+    end
+    describe 'success' do
+      let! (:stubs) do
+        faraday_stubs do |stub|
+          stub.post(
+              "/api/v4/orders",
+              payment_request.to_json,
+          ) { [201, {}, response.to_json] }
+        end
+      end
+
+      it 'should do a post' do
+        payment_request.save!
+        expect(payment_request.id).to eq id
+        expect(payment_request.status).to eq status
         stubs.verify_stubbed_calls
       end
     end
@@ -192,7 +229,7 @@ describe Apruve::Order do
 
   describe '#update' do
     let (:id) { '89ea2488fe0a5c7bb38aa7f9b088874a' }
-    let (:order) { Apruve::Order.new id: id, merchant_id: 9999 }
+    let (:order) { Apruve::Order.new id: id, merchant_id: 9999, payment_term: payment_term }
     describe 'success' do
       let! (:stubs) do
         faraday_stubs do |stub|

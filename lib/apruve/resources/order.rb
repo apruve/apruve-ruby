@@ -1,7 +1,7 @@
 module Apruve
   class Order < Apruve::ApruveObject
-    attr_accessor :id, :merchant_id, :customer_id, :merchant_order_id, :status, :amount_cents, :currency, :tax_cents,
-                  :shipping_cents, :expire_at, :order_items, :accepts_payments_via, :accepts_payment_terms, :payment_terms,
+    attr_accessor :id, :merchant_id, :shopper_id, :merchant_order_id, :status, :amount_cents, :currency, :tax_cents,
+                  :shipping_cents, :expire_at, :order_items, :accepts_payments_via, :accepts_payment_terms, :payment_term,
                   :created_at, :updated_at, :final_state_at, :default_payment_method, :links, :finalize_on_create, :invoice_on_create
 
     def self.find(id)
@@ -54,7 +54,16 @@ module Apruve
     def validate
       errors = []
       errors << 'merchant_id must be set' if merchant_id.nil?
+      errors << 'payment_term must be supplied' if payment_term.nil?
       raise Apruve::ValidationError.new(errors) if errors.length > 0
+    end
+
+    def save!
+      validate
+      response = Apruve.post('orders', self.to_json)
+      self.id = response.body['id']
+      self.status = response.body['status']
+      self.created_at = response.body['created_at']
     end
 
     def value_string
