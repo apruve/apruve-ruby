@@ -54,7 +54,6 @@ module Apruve
     def validate
       errors = []
       errors << 'merchant_id must be set' if merchant_id.nil?
-      errors << 'payment_term must be supplied' if payment_term.nil?
       raise Apruve::ValidationError.new(errors) if errors.length > 0
     end
 
