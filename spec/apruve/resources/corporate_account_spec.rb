@@ -41,26 +41,40 @@ describe Apruve::CorporateAccount do
 
 
   describe '#find' do
-    describe 'success' do
+    context 'successful response' do
       let! (:stubs) do
         faraday_stubs do |stub|
           stub.get("/api/v4/merchants/#{merchant_uuid}/corporate_accounts?email=#{email}") { [200, {}, '{}'] }
         end
       end
-      it 'should do a get' do
+      it 'should get a corporate account' do
         Apruve::CorporateAccount.find(merchant_uuid, email)
         stubs.verify_stubbed_calls
       end
     end
 
-    describe 'not found' do
+    context 'when not found' do
       let! (:stubs) do
         faraday_stubs do |stub|
           stub.get("/api/v4/merchants/#{merchant_uuid}/corporate_accounts?email=#{email}") { [404, {}, 'Not Found'] }
         end
       end
-      it 'should raise' do
+      it 'should raise not found' do
         expect { Apruve::CorporateAccount.find(merchant_uuid, email) }.to raise_error(Apruve::NotFound)
+        stubs.verify_stubbed_calls
+      end
+    end
+  end
+
+  describe '#find_all' do
+    describe 'successful response' do
+      let! (:stubs) do
+        faraday_stubs do |stub|
+          stub.get("/api/v4/merchants/#{merchant_uuid}/corporate_accounts") { [200, {} ,  '{}'] }
+        end
+      end
+      it 'should get all corporate accounts for a merchant' do
+        Apruve::CorporateAccount.find_all(merchant_uuid)
         stubs.verify_stubbed_calls
       end
     end
