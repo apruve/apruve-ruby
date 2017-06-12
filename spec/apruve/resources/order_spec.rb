@@ -141,6 +141,33 @@ describe Apruve::Order do
     end
   end
 
+  describe '#find_all' do
+    context 'successful response' do
+      let! (:stubs) do
+        faraday_stubs do |stub|
+          stub.get('/api/v4/orders') { [200, {}, '[]'] }
+        end
+      end
+      it 'should get all orders' do
+        Apruve::Order.find_all
+        stubs.verify_stubbed_calls
+      end
+    end
+
+    context 'with invalid merchant_order_id query param' do
+      let (:invalid_id) { '123' }
+      let! (:stubs) do
+        faraday_stubs do |stub|
+          stub.get("api/v4/orders?merchant_order_id=#{invalid_id}") { [200, {}, '[]']}
+        end
+      end
+      it 'should return an empty array' do
+        Apruve::Order.find_all(invalid_id)
+        stubs.verify_stubbed_calls
+      end
+    end
+  end
+
   describe '#save' do
     let (:id) { '89ea2488fe0a5c7bb38aa7f9b088874a' }
     let (:status) { 'pending' }

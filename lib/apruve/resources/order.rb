@@ -10,6 +10,16 @@ module Apruve
       Order.new(response.body)
     end
 
+    def self.find_all(merchant_order_id = nil)
+      if merchant_order_id.nil?
+        response = Apruve.get('orders')
+      else
+        response = Apruve.get("orders?merchant_order_id=#{merchant_order_id}")
+      end
+      logger.debug response.body
+      response.body.map { |order| Order.new(order) }
+    end
+
     def self.finalize!(id)
       response = Apruve.post("orders/#{id}/finalize")
       logger.debug response.body
