@@ -145,7 +145,7 @@ describe Apruve::Order do
     context 'successful response' do
       let! (:stubs) do
         faraday_stubs do |stub|
-          stub.get('/api/v4/orders') { [200, {}, '{}'] }
+          stub.get('/api/v4/orders') { [200, {}, '[]'] }
         end
       end
       it 'should get all orders' do
