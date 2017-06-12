@@ -38,7 +38,7 @@ describe Apruve::CorporateAccount do
   it { should respond_to(:payment_method_id) }
   it { should respond_to(:status) }
   it { should respond_to(:trusted_merchant) }
-
+  it { should respond_to(:authorized_buyers) }
 
   describe '#find' do
     context 'successful response' do
