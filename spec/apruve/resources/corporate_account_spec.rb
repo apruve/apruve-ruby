@@ -55,9 +55,10 @@ describe Apruve::CorporateAccount do
     end
 
     context 'email with special characters' do
+      let!(:encoded_email) { CGI::escape(special_email) }
       let! (:stubs) do
         faraday_stubs do |stub|
-          stub.get("/api/v4/merchants/#{merchant_uuid}/corporate_accounts?email=#{special_email}") { [200, {}, '{}'] }
+          stub.get("/api/v4/merchants/#{merchant_uuid}/corporate_accounts?email=#{encoded_email}") { [200, {}, '{}'] }
         end
       end
       it 'should get a corporate account' do
