@@ -12,6 +12,7 @@ describe Apruve::CorporateAccount do
   let (:payment_term_strategy_name) { 'EOMNet15' }
   let (:name) { 'A name' }
   let (:email) { Faker::Internet.email }
+  let(:special_email) { 'foo+test@example.com' }
 
   let (:corporate_account) do
     Apruve::CorporateAccount.new(
@@ -49,6 +50,18 @@ describe Apruve::CorporateAccount do
       end
       it 'should get a corporate account' do
         Apruve::CorporateAccount.find(merchant_uuid, email)
+        stubs.verify_stubbed_calls
+      end
+    end
+
+    context 'email with special characters' do
+      let! (:stubs) do
+        faraday_stubs do |stub|
+          stub.get("/api/v4/merchants/#{merchant_uuid}/corporate_accounts?email=#{special_email}") { [200, {}, '{}'] }
+        end
+      end
+      it 'should get a corporate account' do
+        Apruve::CorporateAccount.find(merchant_uuid, special_email)
         stubs.verify_stubbed_calls
       end
     end

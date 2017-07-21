@@ -1,6 +1,7 @@
 module Apruve
   class ApruveObject
     require 'json'
+    require 'open-uri'
 
     def initialize(args = {})
       args.each do |k, v|
