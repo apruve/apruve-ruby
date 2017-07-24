@@ -8,6 +8,7 @@ module Apruve
       if email.nil?
         return find_all(merchant_id)
       end
+      email = CGI::escape(email)
       response = Apruve.get("merchants/#{merchant_id}/corporate_accounts?email=#{email}")
       CorporateAccount.new(response.body.empty? ? {} : response.body[0])
     end
