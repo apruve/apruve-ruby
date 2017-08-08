@@ -103,6 +103,35 @@ describe Apruve::Shipment do
     end
   end
 
+  describe '#find_all' do
+    context 'successful response' do
+      let (:invoice_id) { '91ac96c0ffc9577ecb634ad726b1874e' }
+      let! (:stubs) do
+        faraday_stubs do |stub|
+          stub.get("/api/v4/invoices/#{invoice_id}/shipments") { [200, {}, '[]'] }
+        end
+      end
+      it 'should get all shipments associated with an invoice' do
+        Apruve::Shipment.find_all(invoice_id)
+        stubs.verify_stubbed_calls
+      end
+    end
+
+    context 'with invalid invoice id' do
+      let (:invoice_id) { 'not-a-valid-apruve-invoice-id' }
+
+      let! (:stubs) do
+        faraday_stubs do |stub|
+          stub.get("/api/v4/invoices/#{invoice_id}/shipments") { [404, {}, 'Not Found'] }
+        end
+      end
+      it 'should return a not found response' do
+        expect { Apruve::Shipment.find_all(invoice_id) }.to raise_error(Apruve::NotFound)
+        stubs.verify_stubbed_calls
+      end
+    end
+  end
+
   describe '#save' do
     let (:id) { '89ea2488fe0a5c7bb38aa7f9b088874a' }
     let (:invoice_id) { '91ac96c0ffc9577ecb634ad726b1874e' }
