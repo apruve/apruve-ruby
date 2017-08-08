@@ -31,6 +31,8 @@ describe Apruve::Invoice do
   it { should respond_to(:due_at) }
   it { should respond_to(:final_state_at) }
   it { should respond_to(:links) }
+  it { should respond_to(:issued_at) }
+  it { should respond_to(:amount_due) }
 
   describe '#to_json' do
     let(:expected) do
