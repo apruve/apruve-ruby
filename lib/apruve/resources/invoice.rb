@@ -1,7 +1,8 @@
 module Apruve
   class Invoice < Apruve::ApruveObject
-    attr_accessor :id, :order_id, :status, :amount_cents, :currency, :merchant_notes, :merchant_invoice_id, :shipping_cents,
-                  :tax_cents, :invoice_items, :payments, :created_at, :opened_at, :due_at, :final_state_at, :issue_on_create, :links
+    attr_accessor :id, :order_id, :status, :amount_cents, :currency, :merchant_notes, :merchant_invoice_id,
+                  :shipping_cents, :tax_cents, :invoice_items, :payments, :created_at, :opened_at, :due_at,
+                  :final_state_at, :issue_on_create, :links, :issued_at, :amount_due
 
     def self.find(id)
       response = Apruve.get("invoices/#{id}")
