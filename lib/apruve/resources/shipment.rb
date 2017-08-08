@@ -9,6 +9,12 @@ module Apruve
       Shipment.new(response.body)
     end
 
+    def self.find_all(invoice_id)
+      response = Apruve.get("invoices/#{invoice_id}/shipments")
+      logger.debug response.body
+      response.body.map { |shipment| Shipment.new(shipment) }
+    end
+
     def initialize(params)
       super
       # hydrate payment items if appropriate
