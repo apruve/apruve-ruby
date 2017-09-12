@@ -1,6 +1,7 @@
 # $:.unshift File.join(File.dirname(__FILE__), 'apruve', 'resources')
 # $:.unshift File.join(File.dirname(__FILE__), 'apruve', 'response')
 
+require 'thread'
 require_relative 'apruve/client'
 require_relative 'apruve/version'
 require_relative 'apruve/error'
@@ -8,28 +9,38 @@ require_relative 'apruve/faraday_error_handler'
 require_relative 'apruve/utils'
 
 module Apruve
-
-  @client = nil
-  @config = {
-      :scheme => 'http',
-      :host => 'localhost',
-      :port => 3000,
-      :version => 'v4',
+  Thread.current[:client] = nil
+  Thread.current[:config] = {
+    scheme: 'http',
+    host: 'localhost',
+    port: 3000,
+    version: 'v4'
   }
 
   class << self
-
-    attr_accessor :client
-    attr_accessor :config
-
-    PROD = 'prod'
-    TEST = 'test'
-    LOCAL = 'local'
+    PROD = 'prod'.freeze
+    TEST = 'test'.freeze
+    LOCAL = 'local'.freeze
 
     def configure(api_key=nil, environment=LOCAL, options={})
-      configure_environment environment
-      @config = @config.merge(options)
-      @client = Apruve::Client.new(api_key, @config)
+      self.config = config.merge(configure_environment(environment)).merge(options)
+      self.client = Apruve::Client.new(api_key, config)
+    end
+
+    def config
+      Thread.current[:config]
+    end
+
+    def config=(c)
+      Thread.current[:config] = c
+    end
+
+    def client
+      Thread.current[:client]
+    end
+
+    def client=(c)
+      Thread.current[:client] = c
     end
 
     def js(display=nil)
@@ -89,31 +100,24 @@ module Apruve
 
     def configure_environment(env)
       if env == PROD
-        @config[:scheme] = 'https'
-        @config[:host] = 'app.apruve.com'
-        @config[:port] = 443
+        { scheme: 'https', host: 'app.apruve.com', port: 443 }
       elsif env == TEST
-        @config[:scheme] = 'https'
-        @config[:host] = 'test.apruve.com'
-        @config[:port] = 443
+        { scheme: 'https', host: 'test.apruve.com', port: 443 }
       elsif env == LOCAL
-        @config[:scheme] = 'http'
-        @config[:host] = 'localhost'
-        @config[:port] = 3000
+        { scheme: 'http', host: 'localhost', port: 3000 }
       else
         raise 'unknown environment'
       end
     end
 
     def js_url
-      port_param = [443, 80].include?(@config[:port]) ? '' : ":#{@config[:port]}"
-      "#{@config[:scheme]}://#{@config[:host]}#{port_param}/js/v4/apruve.js"
+      port_param = [443, 80].include?(config[:port]) ? '' : ":#{config[:port]}"
+      "#{config[:scheme]}://#{config[:host]}#{port_param}/js/v4/apruve.js"
     end
   end
 
   configure
 end
-
 
 # require all the resources! this is needed at the end because
 # the module needs to be defined first, as it contains the registry
