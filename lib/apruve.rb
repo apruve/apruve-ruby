@@ -1,7 +1,6 @@
 # $:.unshift File.join(File.dirname(__FILE__), 'apruve', 'resources')
 # $:.unshift File.join(File.dirname(__FILE__), 'apruve', 'response')
 
-require 'thread'
 require_relative 'apruve/client'
 require_relative 'apruve/version'
 require_relative 'apruve/error'
@@ -17,7 +16,6 @@ module Apruve
       :port => 3000,
       :version => 'v4',
   }
-  @mutex = Mutex.new
 
   class << self
 
@@ -32,13 +30,6 @@ module Apruve
       configure_environment environment
       @config = @config.merge(options)
       @client = Apruve::Client.new(api_key, @config)
-    end
-
-    def configure_with_lock(api_key=nil, environment=LOCAL, options={})
-      @mutex.synchronize do
-        configure(api_key, environment, options)
-        yield
-      end
     end
 
     def js(display=nil)
