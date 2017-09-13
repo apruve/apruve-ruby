@@ -132,4 +132,21 @@ describe 'Apruve' do
       end
     end
   end
+
+  describe 'with multiple threads' do
+    let(:api_key) { 'an-api-key' }
+    let(:another_api_key) { 'another-api-key' }
+
+    it 'should have thread-contained configuration' do
+      Apruve.configure(api_key)
+      thread = Thread.new do
+        Apruve.configure(another_api_key)
+        expect(Apruve.client).not_to be_nil
+        expect(Apruve.client.api_key).to eq another_api_key
+      end
+      thread.join
+      expect(Apruve.client).not_to be_nil
+      expect(Apruve.client.api_key).to eq api_key
+    end
+  end
 end

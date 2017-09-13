@@ -9,14 +9,6 @@ require_relative 'apruve/faraday_error_handler'
 require_relative 'apruve/utils'
 
 module Apruve
-  Thread.current[:client] = nil
-  Thread.current[:config] = {
-    scheme: 'http',
-    host: 'localhost',
-    port: 3000,
-    version: 'v4'
-  }
-
   class << self
     PROD = 'prod'.freeze
     TEST = 'test'.freeze
@@ -28,6 +20,14 @@ module Apruve
     end
 
     def config
+      if Thread.current[:config].nil?
+        Thread.current[:config] = {
+          scheme: 'http',
+          host: 'localhost',
+          port: 3000,
+          version: 'v4'
+        }
+      end
       Thread.current[:config]
     end
 
