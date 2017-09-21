@@ -31,10 +31,10 @@ test.apruve.com for test accounts.
 
 ### Initialize the library
 
-For [test.apruve.com](test.apruve.com)
+For [test.apruve.com](https://test.apruve.com/)
     Apruve.configure('YOUR_APRUVE_API_KEY', 'test')
 
-For [app.apruve.com](app.apruve.com)
+For [app.apruve.com](https://app.apruve.com)
     Apruve.configure('YOUR_APRUVE_API_KEY', 'prod')
 
 ### Create an Order
