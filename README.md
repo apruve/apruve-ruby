@@ -52,7 +52,7 @@ For [app.apruve.com](https://app.apruve.com)
           sku: 'LTR-20R',
           price_ea_cents: 1200,
           quantity: 3,
-          amount_cents: 3600,
+          price_total_cents: 3600,
           view_product_url: 'https://www.example.com/letter-paper'
       )
 
