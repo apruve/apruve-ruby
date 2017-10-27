@@ -4,7 +4,7 @@ describe Apruve::OrderItem do
   let (:line_item) do
     Apruve::OrderItem.new(
         title: 'line 2',
-        amount_cents: '40'
+        price_total_cents: '40'
     )
   end
   subject { line_item }
