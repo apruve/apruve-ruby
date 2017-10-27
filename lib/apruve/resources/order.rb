@@ -81,7 +81,7 @@ module Apruve
 
       # add the line items
       self.order_items.each do |item|
-        str += "#{item.title}#{item.plan_code}#{item.amount_cents}#{item.price_ea_cents}"\
+        str += "#{item.title}#{item.plan_code}#{item.price_total_cents}#{item.price_ea_cents}"\
         "#{item.quantity}#{item.merchant_notes}#{item.description}#{item.variant_info}#{item.sku}"\
         "#{item.vendor}#{item.view_product_url}"
       end
