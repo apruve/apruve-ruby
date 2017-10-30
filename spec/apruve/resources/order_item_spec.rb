@@ -4,13 +4,13 @@ describe Apruve::OrderItem do
   let (:line_item) do
     Apruve::OrderItem.new(
         title: 'line 2',
-        amount_cents: '40'
+        price_total_cents: '40'
     )
   end
   subject { line_item }
 
   it { should respond_to(:title) }
-  it { should respond_to(:amount_cents) }
+  it { should respond_to(:price_total_cents) }
   it { should respond_to(:price_ea_cents) }
   it { should respond_to(:quantity) }
   it { should respond_to(:description) }
