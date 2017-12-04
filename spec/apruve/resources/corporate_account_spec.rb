@@ -40,6 +40,9 @@ describe Apruve::CorporateAccount do
   it { should respond_to(:status) }
   it { should respond_to(:trusted_merchant) }
   it { should respond_to(:authorized_buyers) }
+  it { should respond_to(:credit_available_cents) }
+  it { should respond_to(:credit_balance_cents) }
+  it { should respond_to(:credit_amount_cents) }
 
   describe '#find' do
     context 'successful response' do

@@ -2,7 +2,7 @@ module Apruve
   class CorporateAccount < Apruve::ApruveObject
     attr_accessor :id, :merchant_uuid, :customer_uuid, :type, :created_at, :updated_at, :payment_term_strategy_name,
                   :disabled_at, :name, :creditor_term_id, :payment_method_id, :status, :trusted_merchant,
-                  :authorized_buyers
+                  :authorized_buyers, :credit_available_cents, :credit_balance_cents, :credit_amount_cents
 
     def self.find(merchant_id, email=nil)
       if email.nil?
