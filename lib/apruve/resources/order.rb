@@ -2,7 +2,8 @@ module Apruve
   class Order < Apruve::ApruveObject
     attr_accessor :id, :merchant_id, :shopper_id, :merchant_order_id, :status, :amount_cents, :currency, :tax_cents,
                   :shipping_cents, :expire_at, :order_items, :accepts_payments_via, :accepts_payment_terms, :payment_term,
-                  :created_at, :updated_at, :final_state_at, :default_payment_method, :links, :finalize_on_create, :invoice_on_create
+                  :created_at, :updated_at, :final_state_at, :default_payment_method, :links, :finalize_on_create, :invoice_on_create,
+                  :hash
 
     def self.find(id)
       response = Apruve.get("orders/#{id}")
@@ -16,6 +17,12 @@ module Apruve
       else
         response = Apruve.get("orders?merchant_order_id=#{merchant_order_id}")
       end
+      logger.debug response.body
+      response.body.map { |order| Order.new(order) }
+    end
+
+    def self.find_by_hash(hash)
+      response = Apruve.get("orders?hash=#{hash}")
       logger.debug response.body
       response.body.map { |order| Order.new(order) }
     end
