@@ -26,7 +26,7 @@ integrate Apruve.
 
 ### Create an account on Apruve.
 
-Have a look though our [Getting Started documentation](https://docs.apruve.com/guides/getting-started-f09a17ef-053e-4eba-9141-6fe8ce3b774d) and be sure to use
+Have a look though our [Getting Started documentation](https://docs.apruve.com/docs/getting-started) and be sure to use
 test.apruve.com for test accounts.
 
 ### Initialize the library
