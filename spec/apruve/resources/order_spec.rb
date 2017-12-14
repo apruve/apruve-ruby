@@ -41,7 +41,8 @@ describe Apruve::Order do
         order_items: order_items,
         finalize_on_create: false,
         invoice_on_create: false,
-        payment_term: payment_term
+        payment_term: payment_term,
+        secure_hash: 'fffd123'
     )
   end
   subject { payment_request }
@@ -58,13 +59,14 @@ describe Apruve::Order do
   it { should respond_to(:accepts_payment_terms) }
   it { should respond_to(:finalize_on_create) }
   it { should respond_to(:invoice_on_create) }
+  it { should respond_to(:secure_hash) }
 
   describe '#to_json' do
     let(:expected) do
       "{\"merchant_id\":\"9a9c3389fdc281b5c6c8d542a7e91ff6\",\"shopper_id\":\"9bc388fd08ce2835cfeb2e630316f7f1\",\"merchant_order_id\":\"ABC\","\
       "\"amount_cents\":12340,\"tax_cents\":0,\"shipping_cents\":0,\"order_items\":[{\"title\":\"line 1\",\"price_ea_cents\":\"123\",\"quantity\":10,"\
       "\"description\":\"A line item\",\"variant_info\":\"small\",\"sku\":\"LINE1SKU\",\"vendor\":\"acme, inc.\",\"view_product_url\":\"http://www.apruve.com/doc\""\
-      "},{\"title\":\"line 2\",\"price_ea_cents\":\"40\"}],\"finalize_on_create\":false,\"invoice_on_create\":false,\"payment_term\":{\"corporate_account_id\":\"612e5383e4acc6c2213f3cae6208e868\"}}"
+      "},{\"title\":\"line 2\",\"price_ea_cents\":\"40\"}],\"finalize_on_create\":false,\"invoice_on_create\":false,\"payment_term\":{\"corporate_account_id\":\"612e5383e4acc6c2213f3cae6208e868\"},\"secure_hash\":\"fffd123\"}"
     end
     its(:to_json) { should eq expected }
   end
@@ -163,6 +165,21 @@ describe Apruve::Order do
       end
       it 'should return an empty array' do
         Apruve::Order.find_all(invalid_id)
+        stubs.verify_stubbed_calls
+      end
+    end
+  end
+
+  describe '#find_by_hash' do
+    context 'with invalid hash query param' do
+      let(:invalid_hash) { 'fffd123' }
+      let!(:stubs) do
+        faraday_stubs do |stub|
+          stub.get("api/v4/orders?secure_hash=#{invalid_hash}") { [200, {}, '[]']}
+        end
+      end
+      it 'should return an empty array' do
+        Apruve::Order.find_by_hash(invalid_hash)
         stubs.verify_stubbed_calls
       end
     end
