@@ -24,7 +24,8 @@ module Apruve
     def self.find_by_hash(hash)
       response = Apruve.get("orders?secure_hash=#{hash}")
       logger.debug response.body
-      response.body.map { |order| Order.new(order) }
+      orders = response.body.map { |order| Order.new(order) }
+      orders.max_by { |order| order[:created_at] }
     end
 
     def self.finalize!(id)
