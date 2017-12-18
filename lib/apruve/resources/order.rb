@@ -25,7 +25,7 @@ module Apruve
       response = Apruve.get("orders?secure_hash=#{hash}")
       logger.debug response.body
       orders = response.body.map { |order| Order.new(order) }
-      orders.max_by { |order| order[:created_at] }
+      orders.max_by { |order| order.created_at }
     end
 
     def self.finalize!(id)
