@@ -17,5 +17,10 @@ module Apruve
       response = Apruve.get("merchants/#{merchant_id}/corporate_accounts")
       response.body.map { |ca| CorporateAccount.new(ca.empty? ? {} : ca) }
     end
+
+    def self.find_by_uuid(merchant_id, uuid)
+      response = Apruve.get("merchants/#{merchant_id}/corporate_accounts/#{uuid}")
+      CorporateAccount.new response.body
+    end
   end
 end
