@@ -269,6 +269,18 @@ describe Apruve::Order do
         stubs.verify_stubbed_calls
       end
     end
+
+    describe 'not in cancelable state' do
+      let! (:stubs) do
+        faraday_stubs do |stub|
+          stub.post("/api/v4/orders/#{id}/cancel") { [400, {}, '{}'] }
+        end
+      end
+      it 'should raise' do
+        expect { Apruve::Order.cancel!(id) }.to raise_error(Apruve::BadRequest)
+        stubs.verify_stubbed_calls
+      end
+    end
   end
 
   describe '#update' do
