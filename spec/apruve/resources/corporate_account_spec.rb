@@ -96,4 +96,30 @@ describe Apruve::CorporateAccount do
       end
     end
   end
+
+  describe '#find_by_uuid' do
+    context 'successful response' do
+      let! (:stubs) do
+        faraday_stubs do |stub|
+          stub.get("/api/v4/merchants/#{merchant_uuid}/corporate_accounts/#{id}") { [200, {} , '{}'] }
+        end
+      end
+      it 'should return the corporate account' do
+        Apruve::CorporateAccount.find_by_uuid(merchant_uuid, id)
+        stubs.verify_stubbed_calls
+      end
+    end
+
+    context 'when not found' do
+      let! (:stubs) do
+        faraday_stubs do |stub|
+          stub.get("/api/v4/merchants/#{merchant_uuid}/corporate_accounts/#{id}") { [404, {} , 'Not Found'] }
+        end
+      end
+      it 'should raise not found' do
+        expect { Apruve::CorporateAccount.find_by_uuid(merchant_uuid, id) }.to raise_error(Apruve::NotFound)
+        stubs.verify_stubbed_calls
+      end
+    end
+  end
 end
