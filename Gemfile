@@ -7,6 +7,7 @@ gem 'faraday'
 gem 'faraday_middleware'
 gem 'addressable'
 gem 'json'
+gem 'ffi', '~> 1.10'
 
 group :development do
   gem 'yard'
