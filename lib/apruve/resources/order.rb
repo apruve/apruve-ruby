@@ -1,9 +1,9 @@
 module Apruve
   class Order < Apruve::ApruveObject
     attr_accessor :id, :merchant_id, :shopper_id, :merchant_order_id, :status, :amount_cents, :currency, :tax_cents,
-                  :shipping_cents, :expire_at, :order_items, :accepts_payments_via, :accepts_payment_terms, :payment_term,
-                  :created_at, :updated_at, :final_state_at, :default_payment_method, :links, :finalize_on_create, :invoice_on_create,
-                  :secure_hash
+                  :shipping_cents, :expire_at, :order_items, :accepts_payments_via, :accepts_payment_terms,
+                  :payment_term, :po_number, :created_at, :updated_at, :final_state_at, :default_payment_method, :links,
+                  :finalize_on_create, :invoice_on_create, :secure_hash
 
     def self.find(id)
       response = Apruve.get("orders/#{id}")
