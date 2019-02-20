@@ -60,6 +60,7 @@ describe Apruve::Order do
   it { should respond_to(:finalize_on_create) }
   it { should respond_to(:invoice_on_create) }
   it { should respond_to(:secure_hash) }
+  it { should respond_to(:po_number) }
 
   describe '#to_json' do
     let(:expected) do
