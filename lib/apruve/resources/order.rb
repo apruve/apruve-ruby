@@ -2,7 +2,7 @@ module Apruve
   class Order < Apruve::ApruveObject
     attr_accessor :id, :merchant_id, :shopper_id, :merchant_order_id, :status, :amount_cents, :currency, :tax_cents,
                   :shipping_cents, :expire_at, :order_items, :accepts_payments_via, :accepts_payment_terms,
-                  :payment_term, :po_number, :created_at, :updated_at, :final_state_at, :default_payment_method, :links,
+                  :payment_terms, :po_number, :created_at, :updated_at, :final_state_at, :default_payment_method, :links,
                   :finalize_on_create, :invoice_on_create, :secure_hash
 
     def self.find(id)
@@ -102,6 +102,16 @@ module Apruve
         raise 'api_key has not been set. Set it with Apruve.configure(api_key, environment, options)'
       end
       Digest::SHA256.hexdigest(Apruve.client.api_key+value_string)
+    end
+
+    # The field is actually named 'payment_terms', but some integrations are currently using 'payment_term'.  Pass
+    # those requests through to the correct attribute.
+    def payment_term
+      self.payment_terms
+    end
+
+    def payment_term=(pt)
+      self.payment_terms=pt
     end
   end
 end
