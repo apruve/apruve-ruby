@@ -301,19 +301,19 @@ describe Apruve::Order do
       end
     end
 
-    describe '#payment_term' do
+    describe '#payment_terms' do
       let (:order) { Apruve::Order.new id: id, merchant_id: 9999, payment_term: payment_term }
 
       it 'returns payment_terms' do
-        expect(order.payment_term).to be order.payment_term
+        expect(order.payment_terms).to be order.payment_term
       end
     end
 
-    describe '#payment_term=' do
+    describe '#payment_terms=' do
       let (:order) { Apruve::Order.new id: id, merchant_id: 9999 }
 
       it 'sets payment_terms' do
-        order.payment_term = payment_term
+        order.payment_terms = payment_term
         expect(order.payment_terms).to be payment_term
       end
     end
