@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    apruve (2.0.9)
+    apruve (2.0.10)
       addressable (~> 2.3)
       faraday (>= 0.8.6, <= 0.9.0)
       faraday_middleware (~> 0.9)
@@ -126,4 +126,4 @@ DEPENDENCIES
   yard
 
 BUNDLED WITH
-   1.17.1
+   1.17.3
