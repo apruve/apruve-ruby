@@ -41,7 +41,7 @@ describe Apruve::Order do
         order_items: order_items,
         finalize_on_create: false,
         invoice_on_create: false,
-        payment_terms: payment_term,
+        payment_term: payment_term,
         secure_hash: 'fffd123'
     )
   end
@@ -69,7 +69,7 @@ describe Apruve::Order do
       "{\"merchant_id\":\"9a9c3389fdc281b5c6c8d542a7e91ff6\",\"shopper_id\":\"9bc388fd08ce2835cfeb2e630316f7f1\",\"merchant_order_id\":\"ABC\","\
       "\"amount_cents\":12340,\"tax_cents\":0,\"shipping_cents\":0,\"order_items\":[{\"title\":\"line 1\",\"price_ea_cents\":\"123\",\"quantity\":10,"\
       "\"description\":\"A line item\",\"variant_info\":\"small\",\"sku\":\"LINE1SKU\",\"vendor\":\"acme, inc.\",\"view_product_url\":\"http://www.apruve.com/doc\""\
-      "},{\"title\":\"line 2\",\"price_ea_cents\":\"40\"}],\"finalize_on_create\":false,\"invoice_on_create\":false,\"payment_terms\":{\"corporate_account_id\":\"612e5383e4acc6c2213f3cae6208e868\"},\"secure_hash\":\"fffd123\"}"
+      "},{\"title\":\"line 2\",\"price_ea_cents\":\"40\"}],\"finalize_on_create\":false,\"invoice_on_create\":false,\"payment_term\":{\"corporate_account_id\":\"612e5383e4acc6c2213f3cae6208e868\"},\"secure_hash\":\"fffd123\"}"
     end
     its(:to_json) { should eq expected }
   end
@@ -276,7 +276,7 @@ describe Apruve::Order do
 
   describe '#update' do
     let (:id) { '89ea2488fe0a5c7bb38aa7f9b088874a' }
-    let (:order) { Apruve::Order.new id: id, merchant_id: 9999, payment_terms: payment_term }
+    let (:order) { Apruve::Order.new id: id, merchant_id: 9999, payment_term: payment_term }
     describe 'success' do
       let! (:stubs) do
         faraday_stubs do |stub|
@@ -301,19 +301,19 @@ describe Apruve::Order do
       end
     end
 
-    describe '#payment_term' do
-      let (:order) { Apruve::Order.new id: id, merchant_id: 9999, payment_terms: payment_term }
+    describe '#payment_terms' do
+      let (:order) { Apruve::Order.new id: id, merchant_id: 9999, payment_term: payment_term }
 
-      it 'returns payment_terms' do
-        expect(order.payment_term).to be order.payment_terms
+      it 'returns payment_term' do
+        expect(order.payment_terms).to be order.payment_term
       end
     end
 
-    describe '#payment_term=' do
+    describe '#payment_terms=' do
       let (:order) { Apruve::Order.new id: id, merchant_id: 9999 }
 
       it 'sets payment_terms' do
-        order.payment_term = payment_term
+        order.payment_terms = payment_term
         expect(order.payment_terms).to be payment_term
       end
     end
