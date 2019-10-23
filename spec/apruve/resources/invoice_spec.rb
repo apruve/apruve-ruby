@@ -33,12 +33,53 @@ describe Apruve::Invoice do
   it { should respond_to(:links) }
   it { should respond_to(:issued_at) }
   it { should respond_to(:amount_due) }
+  it { should respond_to(:bill_to_address) }
 
   describe '#to_json' do
     let(:expected) do
       '{"order_id":"9999","amount_cents":12340,"invoice_items":[],"currency":"USD"}'
     end
     its(:to_json) { should eq expected }
+
+    context 'with addresses' do
+      let(:address) do
+        {
+          address_1: '8995 Creola Ville',
+          address_2: 'Apt. 945',
+          city: 'Friesentown',
+          state: 'MN',
+          postal_code: '62685',
+          country_code: 'US',
+          phone_number: '6123456789',
+          fax_number: '6123456789',
+          contact_name: 'Zelda Pagac',
+          name: 'Jacobson, Conn and Kreiger',
+          notes: 'Est corrupti quis cumque.'
+        }
+      end
+      before do
+        [:bill_to_address, :fiscal_representative, :remittance_address, :ship_to_address, :sold_to_address].each do |addr|
+          invoice.send("#{addr.to_s}=", address)
+        end
+      end
+      it 'jsonifies the address' do
+        parsed_invoice = JSON.parse(subject.to_json)
+        [:bill_to_address, :fiscal_representative, :remittance_address, :ship_to_address, :sold_to_address].each do |addr|
+          parsed_addr = parsed_invoice.fetch addr.to_s
+          expect(parsed_addr['address_1']).to eq '8995 Creola Ville'
+          expect(parsed_addr['address_2']).to eq 'Apt. 945'
+          expect(parsed_addr['city']).to eq 'Friesentown'
+          expect(parsed_addr['state']).to eq 'MN'
+          expect(parsed_addr['postal_code']).to eq '62685'
+          expect(parsed_addr['country_code']).to eq 'US'
+          expect(parsed_addr['phone_number']).to eq '6123456789'
+          expect(parsed_addr['fax_number']).to eq '6123456789'
+          expect(parsed_addr['contact_name']).to eq 'Zelda Pagac'
+          expect(parsed_addr['name']).to eq 'Jacobson, Conn and Kreiger'
+          expect(parsed_addr['notes']).to eq 'Est corrupti quis cumque.'
+        end
+      end
+    end
   end
 
   describe '#validate' do
