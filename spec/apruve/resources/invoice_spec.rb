@@ -33,12 +33,46 @@ describe Apruve::Invoice do
   it { should respond_to(:links) }
   it { should respond_to(:issued_at) }
   it { should respond_to(:amount_due) }
+  it { should respond_to(:bill_to_address) }
 
   describe '#to_json' do
     let(:expected) do
       '{"order_id":"9999","amount_cents":12340,"invoice_items":[],"currency":"USD"}'
     end
     its(:to_json) { should eq expected }
+
+    context 'with a bill_to_address' do
+      let(:address) do
+        {
+          address_1: '8995 Creola Ville',
+          address_2: 'Apt. 945',
+          city: 'Friesentown',
+          state: 'MN',
+          postal_code: '62685',
+          country_code: 'US',
+          phone_number: '6123456789',
+          fax_number: '6123456789',
+          contact_name: 'Zelda Pagac',
+          name: 'Jacobson, Conn and Kreiger',
+          notes: 'Est corrupti quis cumque.'
+        }
+      end
+      before { invoice.bill_to_address = address }
+      it 'jsonifies the address' do
+        addy = JSON.parse(subject.to_json).fetch 'bill_to_address'
+        expect(addy['address_1']).to eq '8995 Creola Ville'
+        expect(addy['address_2']).to eq 'Apt. 945'
+        expect(addy['city']).to eq 'Friesentown'
+        expect(addy['state']).to eq 'MN'
+        expect(addy['postal_code']).to eq '62685'
+        expect(addy['country_code']).to eq 'US'
+        expect(addy['phone_number']).to eq '6123456789'
+        expect(addy['fax_number']).to eq '6123456789'
+        expect(addy['contact_name']).to eq 'Zelda Pagac'
+        expect(addy['name']).to eq 'Jacobson, Conn and Kreiger'
+        expect(addy['notes']).to eq 'Est corrupti quis cumque.'
+      end
+    end
   end
 
   describe '#validate' do
