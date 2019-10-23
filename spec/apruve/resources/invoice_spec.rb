@@ -41,7 +41,7 @@ describe Apruve::Invoice do
     end
     its(:to_json) { should eq expected }
 
-    context 'with a bill_to_address' do
+    context 'with addresses' do
       let(:address) do
         {
           address_1: '8995 Creola Ville',
@@ -57,20 +57,27 @@ describe Apruve::Invoice do
           notes: 'Est corrupti quis cumque.'
         }
       end
-      before { invoice.bill_to_address = address }
+      before do
+        [:bill_to_address, :fiscal_representative, :remittance_address, :ship_to_address, :sold_to_address].each do |addr|
+          invoice.send("#{addr.to_s}=", address)
+        end
+      end
       it 'jsonifies the address' do
-        addy = JSON.parse(subject.to_json).fetch 'bill_to_address'
-        expect(addy['address_1']).to eq '8995 Creola Ville'
-        expect(addy['address_2']).to eq 'Apt. 945'
-        expect(addy['city']).to eq 'Friesentown'
-        expect(addy['state']).to eq 'MN'
-        expect(addy['postal_code']).to eq '62685'
-        expect(addy['country_code']).to eq 'US'
-        expect(addy['phone_number']).to eq '6123456789'
-        expect(addy['fax_number']).to eq '6123456789'
-        expect(addy['contact_name']).to eq 'Zelda Pagac'
-        expect(addy['name']).to eq 'Jacobson, Conn and Kreiger'
-        expect(addy['notes']).to eq 'Est corrupti quis cumque.'
+        parsed_invoice = JSON.parse(subject.to_json)
+        [:bill_to_address, :fiscal_representative, :remittance_address, :ship_to_address, :sold_to_address].each do |addr|
+          parsed_addr = parsed_invoice.fetch addr.to_s
+          expect(parsed_addr['address_1']).to eq '8995 Creola Ville'
+          expect(parsed_addr['address_2']).to eq 'Apt. 945'
+          expect(parsed_addr['city']).to eq 'Friesentown'
+          expect(parsed_addr['state']).to eq 'MN'
+          expect(parsed_addr['postal_code']).to eq '62685'
+          expect(parsed_addr['country_code']).to eq 'US'
+          expect(parsed_addr['phone_number']).to eq '6123456789'
+          expect(parsed_addr['fax_number']).to eq '6123456789'
+          expect(parsed_addr['contact_name']).to eq 'Zelda Pagac'
+          expect(parsed_addr['name']).to eq 'Jacobson, Conn and Kreiger'
+          expect(parsed_addr['notes']).to eq 'Est corrupti quis cumque.'
+        end
       end
     end
   end
